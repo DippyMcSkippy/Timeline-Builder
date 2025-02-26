@@ -6,8 +6,8 @@
 
 <VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.timelinebuilder.MenuController">
     <Label style="-fx-font-size: 20px;" text="Timeline Builder" />
-    <Button fx:id="createTimelineButton" text="Create Timeline" />
-    <Button fx:id="editTimelineButton" text="Edit Timeline" />
-    <Button fx:id="viewTimelineButton" text="View Timeline" />
+    <Button fx:id="createMultiverseButton" text="Create Multiverse" />
+    <Button fx:id="editMultiverseButton" text="Edit Timeline" />
+    <Button fx:id="viewMultiverseButton" text="View Timeline" />
     <Button fx:id="exitButton" text="Exit" />
 </VBox>

@@ -1,29 +1,23 @@
 package com.example.timelinebuilder;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.FileChooser;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
+import com.example.file.MultiverseCreate;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MenuController {
     @FXML
-    private Button createTimelineButton;
+    private Button createMultiverseButton;
 
     @FXML
-    private Button editTimelineButton;
+    private Button editMultiverseButton;
 
     @FXML
-    private Button viewTimelineButton;
+    private Button viewMultiverseButton;
 
     @FXML
     private Button exitButton;
@@ -37,41 +31,20 @@ public class MenuController {
 
     @FXML
     public void initialize() {
-        createTimelineButton.setOnAction(e -> onCreateTimeline());
-        editTimelineButton.setOnAction(e -> onEditTimeline());
-        viewTimelineButton.setOnAction(e -> onViewTimeline());
+        createMultiverseButton.setOnAction(e -> onCreateTimeline());
+        editMultiverseButton.setOnAction(e -> onEditTimeline());
+        viewMultiverseButton.setOnAction(e -> onViewTimeline());
         exitButton.setOnAction(e -> onExit());
     }
 
     private void onCreateTimeline() {
-        System.out.println("Button clicked");
         try {
-            stage.setMaximized(false);
-            Screen screen = Screen.getPrimary();
-            Rectangle2D bounds = screen.getVisualBounds();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/create-timeline-view.fxml"));
-            Scene scene = new Scene(loader.load());
-
-            // Get the current stage
-            Stage stage = (Stage) createTimelineButton.getScene().getWindow();
-
-            // Set the stage size to the full screen size
-            stage.setWidth(bounds.getWidth());
-            stage.setHeight(bounds.getHeight());
-            ;
-
-            // Set the scene for the stage
-            stage.setScene(scene);
-
-            // Adjust the stage to be centered, so it appears properly on full screen or resized window
-            stage.setX(bounds.getMinX());  // Align to the left edge
-            stage.setY(bounds.getMinY());  // Align to the top edge
-
-            // Set maximized state if required
-
-            stage.setMaximized(true);
-
-            stage.show();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/multiverse-create-view.fxml"));
+            Scene scene = new Scene(loader.load(), 300, 200);
+            Stage newStage = new Stage();
+            newStage.setTitle("Create New Multiverse");
+            newStage.setScene(scene);
+            newStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
