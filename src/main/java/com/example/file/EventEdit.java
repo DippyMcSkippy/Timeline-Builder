@@ -1,7 +1,7 @@
 package com.example.file;
 
 public class EventEdit {
-    //event read
+    //event get
     //event copy
     //event delete
     //event paste

@@ -1,7 +1,7 @@
 package com.example.file;
 
 public class UniverseEdit {
-    //universe read
+    //universe get
     //universe copy
     //universe delete
     //universe paste

@@ -5,4 +5,8 @@ public class Nexus {
     int endDate;
     String startUni;
     String endUni;
+
+    //create universe
 }
+
+
