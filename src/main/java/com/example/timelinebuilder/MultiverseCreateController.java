@@ -13,18 +13,19 @@ public class MultiverseCreateController {
     @FXML
     private Button submitButton;
 
-    private MultiverseCreate multiverseCreate;
-
     @FXML
     public void initialize() {
-        submitButton.setOnAction(e -> onSubmit());
+        submitButton.setOnAction(event -> handleSubmit());
     }
 
-    private void onSubmit() {
+    @FXML
+    private void handleSubmit() {
         String name = nameField.getText();
         if (!name.isEmpty()) {
-            multiverseCreate = new MultiverseCreate();
+            MultiverseCreate multiverseCreate = new MultiverseCreate();
             multiverseCreate.setMultiverseName(name);
+            multiverseCreate.showDirectoryChooser();
+
             Stage stage = (Stage) submitButton.getScene().getWindow();
             stage.close();
         }

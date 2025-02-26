@@ -11,9 +11,9 @@ public class MultiverseCreate {
         showDirectoryChooser();
     }
 
-    private void showDirectoryChooser() {
+    public void showDirectoryChooser() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("Select Root Directory for " + multiverseName);
+        directoryChooser.setTitle("Select Root Directory");
         File selectedDirectory = directoryChooser.showDialog(null);
 
         if (selectedDirectory != null) {
