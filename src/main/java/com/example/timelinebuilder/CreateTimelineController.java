@@ -8,11 +8,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
 
 public class CreateTimelineController {
+
+    private FileManager fileManager;
 
     @FXML
     private TextField timelineFileNameField;
@@ -49,6 +52,7 @@ public class CreateTimelineController {
 
     @FXML
     public void  initialize(){
+        fileManager = new FileManager(new Stage());
         datingSystemDropdown.getItems().addAll("Event-Based Calendar","Start-Date Calendar");
 
         datingSystemDropdown.setOnAction(e -> updateCalendarFields());
