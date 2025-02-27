@@ -2,10 +2,17 @@ package com.example.file;
 
 import javafx.stage.DirectoryChooser;
 import java.io.File;
+import com.opencsv.CSVWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class MultiverseCreate {
     private String rootPath;
     private String multiverseName;
+    private String datingSystem;
+    private String beforeEra;
+    private String duringEra;
+    private String afterEra;
 
     public MultiverseCreate() {
         showDirectoryChooser();
@@ -33,9 +40,51 @@ public class MultiverseCreate {
         return multiverseName;
     }
 
-    //Create Multiverse File in multiverse folder
-    //Dating System
+    public void setDatingSystem(String system) {
+        this.datingSystem = system;
+    }
 
-    //create universe folder
+    public void setRelativeEras(String before, String during, String after) {
+        this.beforeEra = before;
+        this.duringEra = during;
+        this.afterEra = after;
+    }
+
+    public void createMultiverseFile() {
+        try {
+            String csvFilePath = rootPath + File.separator + multiverseName + ".csv";
+            CSVWriter writer = new CSVWriter(new FileWriter(csvFilePath));
+
+            // Write the multiverse configuration data
+            String[] header = {"Property", "Value"};
+            writer.writeNext(header);
+
+            String[] nameRow = {"Multiverse Name", multiverseName};
+            String[] datingSystemRow = {"Dating System", datingSystem};
+            writer.writeNext(nameRow);
+            writer.writeNext(datingSystemRow);
+
+            // Add relative era information if applicable
+            if ("Relative".equals(datingSystem)) {
+                writer.writeNext(new String[]{"Before Era", beforeEra});
+                writer.writeNext(new String[]{"During Era", duringEra});
+                writer.writeNext(new String[]{"After Era", afterEra});
+            }
+
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    //Create Multiverse File in multiverse folder
+        //create json file named the same as the multiverse name
+        //write to file the name of the
+
+
+
+    //create universes folder
     //universe create in universe folder
 }

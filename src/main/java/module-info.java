@@ -11,6 +11,7 @@ module com.example.timelinebuilder {
     requires eu.hansolo.tilesfx;
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.databind;
+    requires com.opencsv;
 
     opens com.example.timelinebuilder to javafx.fxml;
     exports com.example.timelinebuilder;
