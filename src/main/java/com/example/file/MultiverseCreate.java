@@ -14,13 +14,30 @@ public class MultiverseCreate {
     private String duringEra;
     private String afterEra;
 
+    private String multiversePath;
+    private String universesPath;
+    private String csvPath;
+
     public MultiverseCreate() {
         showDirectoryChooser();
     }
 
+    //getters for files and dirctories
+    public String getMultiversePath() {
+        return multiversePath;
+    }
+
+    public String getUniversesPath() {
+        return universesPath;
+    }
+
+    public String getCsvPath() {
+        return csvPath;
+    }
+
     public void showDirectoryChooser() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("Select Root Directory");
+        directoryChooser.setTitle("Select Save Location For Multiverse");
         File selectedDirectory = directoryChooser.showDialog(null);
 
         if (selectedDirectory != null) {
@@ -52,8 +69,16 @@ public class MultiverseCreate {
 
     public void createMultiverseFile() {
         try {
-            String csvFilePath = rootPath + File.separator + multiverseName + ".csv";
+            //create folder and directory
+            String dirPath = rootPath + File.separator + multiverseName;
+            File directory = new File(dirPath);
+            directory.mkdir();
+
+            //creat csv file
+            String csvFilePath = dirPath + File.separator + multiverseName + ".csv";
             CSVWriter writer = new CSVWriter(new FileWriter(csvFilePath));
+
+
 
             // Write the multiverse configuration data
             String[] header = {"Property", "Value"};
@@ -64,7 +89,6 @@ public class MultiverseCreate {
             writer.writeNext(nameRow);
             writer.writeNext(datingSystemRow);
 
-            // Add relative era information if applicable
             if ("Relative".equals(datingSystem)) {
                 writer.writeNext(new String[]{"Before Era", beforeEra});
                 writer.writeNext(new String[]{"During Era", duringEra});
@@ -72,15 +96,22 @@ public class MultiverseCreate {
             }
 
             writer.close();
+
+            //create universe folder
+            String uniPath = dirPath + File.separator + "Universes";
+            File universes = new File(uniPath);
+            universes.mkdir();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
 
 
     //Create Multiverse File in multiverse folder
-        //create json file named the same as the multiverse name
+        //create csv file named the same as the multiverse name
         //write to file the name of the
 
 
