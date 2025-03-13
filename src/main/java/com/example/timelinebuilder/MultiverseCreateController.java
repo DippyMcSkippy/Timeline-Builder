@@ -1,12 +1,16 @@
 package com.example.timelinebuilder;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import com.example.file.MultiverseCreate;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
+
+import java.io.IOException;
 
 public class MultiverseCreateController {
     @FXML
@@ -61,6 +65,21 @@ public class MultiverseCreateController {
             //multiverseCreate.showDirectoryChooser(); this was removed because it would open the file manager twice
 
             multiverseCreate.createMultiverseFile();
+
+            //open universe create window
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/universe-create-view.fxml"));
+                Scene scene = new Scene(loader.load(), 300, 200);
+                Stage newStage = new Stage();
+                newStage.setTitle("Create New Universe");
+                newStage.setScene(scene);
+                newStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+
             Stage stage = (Stage) submitButton.getScene().getWindow();
             stage.close();
         }

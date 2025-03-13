@@ -1,6 +1,10 @@
 package com.example.file;
 
 public class UniverseCreate {
+
+    private String universeName;
+
+
     //name
     //create universe file
     //priority
