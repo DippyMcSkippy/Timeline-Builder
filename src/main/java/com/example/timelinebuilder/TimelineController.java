@@ -6,7 +6,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import com.example.file.MultiverseGet;
+import com.example.file.MultiverseCreate;
 import java.io.IOException;
+import java.io.File;
 
 public class TimelineController {
     @FXML
@@ -16,31 +19,82 @@ public class TimelineController {
     private HBox universesContainer;
 
     private String multiversePath;
+    private MultiverseGet multiverseGet;
 
     public void setMultiversePaths(String multiversePath) {
         this.multiversePath = multiversePath;
+
+        // Get the multiverse CSV path
+        String multiverseName = multiversePath.substring(multiversePath.lastIndexOf(File.separator) + 1);
+        String multiverseCsvPath = multiversePath + File.separator + multiverseName + ".csv";
+
+        // Create MultiverseGet instance
+        this.multiverseGet = new MultiverseGet(multiverseCsvPath);
+
         loadMultiverse();
     }
 
     private void loadMultiverse() {
-        // Load multiverse data and populate the view
-        // This is where you'd implement the timeline visualization
+        // Use MultiverseGet to get the multiverse name
+        if (multiverseGet != null) {
+            multiverseNameLabel.setText(multiverseGet.getMultiverseName());
+        }
 
-        // For now, just set the multiverse name
-        String multiverseName = multiversePath.substring(multiversePath.lastIndexOf(System.getProperty("file.separator")) + 1);
-        multiverseNameLabel.setText(multiverseName);
+        // Here you would also load and display the universes and events
     }
 
     @FXML
     private void handleAddUniverse() {
-        // Implement universe addition logic
-        System.out.println("Add Universe clicked");
+        try {
+            // Get the universes folder path from the multiverse path
+            String universesFolderPath = multiversePath + File.separator + "Universes";
+
+            // Get the multiverse CSV path
+            String multiverseName = multiversePath.substring(multiversePath.lastIndexOf(File.separator) + 1);
+            String multiverseCsvPath = multiversePath + File.separator + multiverseName + ".csv";
+
+            // Create a custom MultiverseCreate object without showing directory chooser
+            MultiverseCreate multiverseCreate = new MultiverseCreate() {
+                // Override the constructor behavior to prevent directory chooser from showing
+                @Override
+                public void showDirectoryChooser() {
+                    // Do nothing - we don't want to show the chooser here
+                }
+            };
+
+            // Set the multiverse CSV path manually
+            multiverseCreate.setMultiverseName(multiverseName);
+
+            // Load the universe creation dialog
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("universe-create-view.fxml"));
+            Scene scene = new Scene(loader.load(), 500, 300);
+
+            // Get the controller and set the necessary paths
+            UniverseCreateController controller = loader.getController();
+            controller.setUniversesFolderPath(universesFolderPath);
+            controller.setMultiverseCreate(multiverseCreate);
+
+            // Create and show the stage
+            Stage stage = new Stage();
+            stage.setTitle("Create New Universe");
+            stage.setScene(scene);
+            stage.showAndWait(); // Use showAndWait to block until dialog is closed
+
+            // After dialog is closed, refresh the view
+            loadMultiverse();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void handleAddEvent() {
         // Implement event addition logic
         System.out.println("Add Event clicked");
+
+        // This would need to be implemented to show a dialog for selecting a universe
+        // and then creating an event in that universe
     }
 
     @FXML
