@@ -1,15 +1,15 @@
 package com.example.timelinebuilder;
 
+import com.example.file.MultiverseCreate;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
-import com.example.file.MultiverseCreate;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-
+import javafx.stage.Stage;
+import java.io.File;
 import java.io.IOException;
 
 public class MultiverseCreateController {
@@ -34,57 +34,84 @@ public class MultiverseCreateController {
     @FXML
     private Button submitButton;
 
-    @FXML
-    public void initialize() {
-        datingSystem.getItems().addAll("Numeral", "Relative");
+    private Stage menuStage;
+    private MultiverseCreate multiverseCreator;
 
-        datingSystem.setOnAction(event -> {
-            boolean isRelative = "Relative".equals(datingSystem.getValue());
-            relativeFields.setVisible(isRelative);
-            relativeFields.setManaged(isRelative);
-        });
-
-        submitButton.setOnAction(event -> handleSubmit());
+    public void setMenuStage(Stage menuStage) {
+        this.menuStage = menuStage;
     }
 
     @FXML
-    private void handleSubmit() {
-        String name = nameField.getText();
-        if (!name.isEmpty()) {
-            MultiverseCreate multiverseCreate = new MultiverseCreate();
-            multiverseCreate.setMultiverseName(name);
-            multiverseCreate.setDatingSystem(datingSystem.getValue());
+    public void initialize() {
+        // Initialize the MultiverseCreate instance
+        multiverseCreator = new MultiverseCreate();
 
-            if ("Relative".equals(datingSystem.getValue())) {
-                multiverseCreate.setRelativeEras(
-                        beforeField.getText(),
-                        duringField.getText(),
-                        afterField.getText()
-                );
-            }
+        datingSystem.getItems().addAll("Numeral", "Relative");
+        datingSystem.setValue("Numeral");
 
-            multiverseCreate.createMultiverseFile();
+        // Show/hide era fields based on dating system
+        datingSystem.setOnAction(e -> {
+            boolean isRelative = "Relative".equals(datingSystem.getValue());
+            relativeFields.setVisible(isRelative);
+        });
 
-            // Open Universe Creator window
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/universe-create-view.fxml"));
-                Scene scene = new Scene(loader.load(), 300, 200);
+        submitButton.setOnAction(event -> createMultiverse());
+    }
 
-                // Get controller and set the universes folder path
-                UniverseCreateController controller = loader.getController();
-                controller.setUniversesFolderPath(multiverseCreate.getUniversesFolderPath());
-                controller.setMultiverseCreate(multiverseCreate);  // Pass the MultiverseCreate instance
+    private void createMultiverse() {
+        String multiverseName = nameField.getText();
+        String datingSystemValue = datingSystem.getValue();
 
-                Stage newStage = new Stage();
-                newStage.setTitle("Create New Universe");
-                newStage.setScene(scene);
-                newStage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (multiverseName == null || multiverseName.isEmpty()) {
+            System.out.println("Multiverse name is empty");
+            return;
+        }
 
-            Stage stage = (Stage) submitButton.getScene().getWindow();
-            stage.close();
+        // Check if root path was selected
+        if (multiverseCreator.getRootPath() == null) {
+            System.out.println("No directory selected");
+            return;
+        }
+
+        // Set multiverse properties
+        multiverseCreator.setMultiverseName(multiverseName);
+        multiverseCreator.setDatingSystem(datingSystemValue);
+
+        if ("Relative".equals(datingSystemValue)) {
+            String beforeEra = beforeField.getText();
+            String duringEra = duringField.getText();
+            String afterEra = afterField.getText();
+            multiverseCreator.setRelativeEras(beforeEra, duringEra, afterEra);
+        }
+
+        // Create the multiverse file
+        multiverseCreator.createMultiverseFile();
+
+        // Close the multiverse creation window
+        Stage currentStage = (Stage) submitButton.getScene().getWindow();
+        currentStage.close();
+
+        // Close the menu window if it exists
+        if (menuStage != null) {
+            menuStage.close();
+        }
+
+        // Open the timeline view in a new window
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("timeline-view.fxml"));
+            Scene scene = new Scene(loader.load(), 800, 600);
+
+            TimelineController controller = loader.getController();
+            controller.setMultiversePaths(multiverseCreator.getMultiverseFolderPath());
+
+            Stage timelineStage = new Stage();
+            timelineStage.setTitle("Timeline Builder - " + multiverseName);
+            timelineStage.setScene(scene);
+            timelineStage.setMaximized(true);
+            timelineStage.show();
+        } catch (IOException e) {
+            System.out.println("Error loading timeline view: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

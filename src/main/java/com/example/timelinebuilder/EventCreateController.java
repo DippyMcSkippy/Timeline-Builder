@@ -1,5 +1,6 @@
 package com.example.timelinebuilder;
 
+import com.example.file.EventCreate;
 import com.example.file.MultiverseGet;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.fxml.FXML;
@@ -182,6 +183,10 @@ public class EventCreateController {
         eventTypeComboBox.getItems().addAll("Normal", "Incursion", "Nexus", "Travel");
         eventTypeComboBox.setValue("Normal");
 
+        // Show normal event controls by default
+        normalEventControls.setVisible(true);
+        normalEventControls.setManaged(true);
+
         // Show/hide date controls based on event type
         eventTypeComboBox.setOnAction(e -> {
             boolean isNormal = "Normal".equals(eventTypeComboBox.getValue());
@@ -197,7 +202,35 @@ public class EventCreateController {
         String eventType = eventTypeComboBox.getValue();
 
         if (!eventName.isEmpty() && eventType != null) {
-            // Create event logic will go here
+            EventCreate eventCreate = new EventCreate(eventsFolder);
+            eventCreate.setEventName(eventName);
+            eventCreate.setEventType(eventType);
+
+            if ("Normal".equals(eventType)) {
+                // Get start date values
+                String startYear = multiverseGet.isRelativeDating() ?
+                        startYearRelativeField.getText() : startYearField.getText();
+                String startMonth = startMonthComboBox.getValue();
+                String startDay = startDayComboBox.getValue();
+                String startEra = multiverseGet.isRelativeDating() ?
+                        startEraComboBox.getValue() : null;
+
+                // Get end date values
+                String endYear = multiverseGet.isRelativeDating() ?
+                        endYearRelativeField.getText() : endYearField.getText();
+                String endMonth = endMonthComboBox.getValue();
+                String endDay = endDayComboBox.getValue();
+                String endEra = multiverseGet.isRelativeDating() ?
+                        endEraComboBox.getValue() : null;
+
+                // Set dates in event create
+                eventCreate.setStartDate(startYear, startMonth, startDay, startEra);
+                eventCreate.setEndDate(endYear, endMonth, endDay, endEra);
+            }
+            // Add other event type handling here when implemented
+
+            // Create the event file
+            eventCreate.createEventFile();
 
             Stage stage = (Stage) submitButton.getScene().getWindow();
             stage.close();
