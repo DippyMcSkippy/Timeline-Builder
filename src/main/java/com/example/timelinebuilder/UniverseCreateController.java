@@ -29,12 +29,15 @@ public class UniverseCreateController {
     @FXML
     private Button submitButton;
 
-    private String universesFolderPath;
     private Multiverse multiverse;
 
     public void setMultiverse(Multiverse multiverse) {
         this.multiverse = multiverse;
-        this.universesFolderPath = multiverse.getUniversesFolderPath(); // Initialize universesFolderPath
+        if (multiverse != null) {
+            System.out.println("UCC setMultiverse: Universes folder path set to: " + multiverse.getUniversesFolderPath());
+        } else {
+            System.out.println("UCC setMultiverse: Multiverse is null");
+        }
     }
 
     @FXML
@@ -78,38 +81,39 @@ public class UniverseCreateController {
     }
 
     private void handleSubmit() {
-        System.out.println("UCC: Submit button clicked");
+        System.out.println("UCC handleSubmit: Submit button clicked");
+
+        if (multiverse == null) {
+            System.out.println("UCC handleSubmit: Multiverse is null");
+            return;
+        }
 
         String name = nameField.getText();
         int priority = priorityComboBox.getValue();
         String colorHex = hexColorField.getText();
 
-        System.out.println("UCC: Name: " + name);
-        System.out.println("UCC: Priority: " + priority);
-        System.out.println("UCC: Color: " + colorHex);
-        System.out.println("UCC: Universes folder path: " + universesFolderPath);
+        System.out.println("UCC handleSubmit: Name: " + name);
+        System.out.println("UCC handleSubmit: Priority: " + priority);
+        System.out.println("UCC handleSubmit: Color: " + colorHex);
 
-        if (multiverse != null) {
-            System.out.println("UCC: Multiverse is not null");
-            System.out.println("UCC: Multiverse CSV path: " + multiverse.getMultiverseCsvPath());
-        } else {
-            System.out.println("UCC: Multiverse is null");
-        }
+        String universesFolderPath = multiverse.getUniversesFolderPath();
+        System.out.println("UCC handleSubmit: Universes folder path: " + universesFolderPath);
+        System.out.println("UCC handleSubmit: Multiverse CSV path: " + multiverse.getMultiverseCsvPath());
 
         if (!name.isEmpty() && universesFolderPath != null) {
             try {
-                System.out.println("UCC: Creating universe...");
+                System.out.println("UCC handleSubmit: Creating universe...");
                 Universe universe = new Universe(universesFolderPath);
                 universe.setUniverseName(name);
                 universe.setUniversePriority(priority);
                 universe.setUniverseColor(colorHex);
                 universe.createUniverse();
-                System.out.println("UCC: Universe created successfully");
+                System.out.println("UCC handleSubmit: Universe created successfully");
 
-                System.out.println("UCC: Events folder: " + universe.getEventsFolder());
+                System.out.println("UCC handleSubmit: Events folder: " + universe.getEventsFolder());
 
                 try {
-                    System.out.println("UCC: Loading event creation view...");
+                    System.out.println("UCC handleSubmit: Loading event creation view...");
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/event-create-view.fxml"));
                     Scene scene = new Scene(loader.load(), 500, 400);
 
@@ -117,31 +121,31 @@ public class UniverseCreateController {
                     controller.setEventsFolder(universe.getEventsFolder());
 
                     // Pass the multiverse CSV path from Multiverse
-                    if (multiverse != null && multiverse.getMultiverseCsvPath() != null) {
+                    if (multiverse.getMultiverseCsvPath() != null) {
                         controller.setMultiverseCsvPath(multiverse.getMultiverseCsvPath());
                     } else {
-                        System.out.println("UCC: Warning: Multiverse or its CSV path is null");
+                        System.out.println("UCC handleSubmit: Warning: Multiverse CSV path is null");
                     }
 
                     Stage newStage = new Stage();
-                    newStage.setTitle("UCC: Create New Event");
+                    newStage.setTitle("Create New Event");
                     newStage.setScene(scene);
                     newStage.show();
 
-                    System.out.println("UCC: Event creation view loaded successfully");
+                    System.out.println("UCC handleSubmit: Event creation view loaded successfully");
                 } catch (IOException e) {
-                    System.err.println("UCC: Error loading event creation view: " + e.getMessage());
+                    System.err.println("UCC handleSubmit: Error loading event creation view: " + e.getMessage());
                     e.printStackTrace();
                 }
 
                 Stage stage = (Stage) submitButton.getScene().getWindow();
                 stage.close();
             } catch (Exception e) {
-                System.err.println("UCC: Error in handleSubmit: " + e.getMessage());
+                System.err.println("UCC handleSubmit: Error in handleSubmit: " + e.getMessage());
                 e.printStackTrace();
             }
         } else {
-            System.out.println("UCC: Name is empty or universesFolderPath is null");
+            System.out.println("UCC handleSubmit: Name is empty or universesFolderPath is null");
         }
     }
 }

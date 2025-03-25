@@ -19,6 +19,7 @@ public class MultiverseDisplayController {
 
     private String multiverseFolderPath;
     private String multiverseCsvFilename;
+    private String universesFolderPath;
 
     @FXML
     public void initialize() {
@@ -29,9 +30,11 @@ public class MultiverseDisplayController {
         // Get paths from Multiverse
         this.multiverseFolderPath = multiverse.getMultiverseFolderPath();
         this.multiverseCsvFilename = multiverse.getMultiverseCsvPath();
+        this.universesFolderPath = multiverse.getUniversesFolderPath();
 
         System.out.println("MDC: Using folder path: " + multiverseFolderPath);
         System.out.println("MDC: Using CSV path: " + multiverseCsvFilename);
+        System.out.println("MDC: Using universes folder path: " + universesFolderPath);
 
         // Load multiverse data
         loadMultiverseData();

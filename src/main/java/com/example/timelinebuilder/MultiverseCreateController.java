@@ -104,10 +104,13 @@ public class MultiverseCreateController {
             e.printStackTrace();
         }
 
-        // Open Universe Creator window
+        // Open Universe Creator window and pass the Multiverse object
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/universe-create-view.fxml"));
             Scene scene = new Scene(loader.load(), 300, 200);
+
+            UniverseCreateController controller = loader.getController();
+            controller.setMultiverse(multiverse); // Set the multiverse object
 
             Stage newStage = new Stage();
             newStage.setTitle("Create New Universe");
