@@ -66,7 +66,7 @@ public class TimelineController {
             multiverseCreate.setMultiverseName(multiverseName);
 
             // Load the universe creation dialog
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("universe-create-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/universe-create-view.fxml"));
             Scene scene = new Scene(loader.load(), 500, 300);
 
             // Get the controller and set the necessary paths
@@ -111,7 +111,7 @@ public class TimelineController {
             currentStage.close();
 
             // Open the main menu
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("menu-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/menu-view.fxml"));
             Scene scene = new Scene(loader.load(), 400, 400);
 
             Stage menuStage = new Stage();
