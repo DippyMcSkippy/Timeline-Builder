@@ -8,8 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import com.example.timelinebuilder.MultiverseDisplayController;
 import javafx.stage.Stage;
-import java.io.File;
 import java.io.IOException;
 
 public class MultiverseCreateController {
@@ -67,12 +67,6 @@ public class MultiverseCreateController {
             return;
         }
 
-        // Check if root path was selected
-        if (multiverseCreator.getRootPath() == null) {
-            System.out.println("No directory selected");
-            return;
-        }
-
         // Set multiverse properties
         multiverseCreator.setMultiverseName(multiverseName);
         multiverseCreator.setDatingSystem(datingSystemValue);
@@ -87,30 +81,39 @@ public class MultiverseCreateController {
         // Create the multiverse file
         multiverseCreator.createMultiverseFile();
 
-        // Close the multiverse creation window
-        Stage currentStage = (Stage) submitButton.getScene().getWindow();
-        currentStage.close();
+        // Open Multiverse Display window first
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/multiverse-display-view.fxml"));
+            Scene scene = new Scene(loader.load(), 400, 300);
 
-        // Close the menu window if it exists
-        if (menuStage != null) {
-            menuStage.close();
+            // Optionally, pass data to the MultiverseDisplayController
+            MultiverseDisplayController controller = loader.getController();
+            // Pass any necessary data to the controller here
+
+            Stage newStage = new Stage();
+            newStage.setTitle("Multiverse Display");
+            newStage.setScene(scene);
+            newStage.setMaximized(true); // Set the new stage to full screen
+            newStage.show();
+
+            // Close the menu-view.fxml stage
+            Stage currentStage = (Stage) nameField.getScene().getWindow();
+            currentStage.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        // Open the timeline view in a new window
+        // Open Universe Creator window
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("timeline-view.fxml"));
-            Scene scene = new Scene(loader.load(), 800, 600);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/universe-create-view.fxml"));
+            Scene scene = new Scene(loader.load(), 300, 200);
 
-            TimelineController controller = loader.getController();
-            controller.setMultiversePaths(multiverseCreator.getMultiverseFolderPath());
-
-            Stage timelineStage = new Stage();
-            timelineStage.setTitle("Timeline Builder - " + multiverseName);
-            timelineStage.setScene(scene);
-            timelineStage.setMaximized(true);
-            timelineStage.show();
+            Stage newStage = new Stage();
+            newStage.setTitle("Create New Universe");
+            newStage.setScene(scene);
+            newStage.show();
         } catch (IOException e) {
-            System.out.println("Error loading timeline view: " + e.getMessage());
             e.printStackTrace();
         }
     }
