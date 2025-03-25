@@ -47,6 +47,9 @@ public class MenuController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Stage stage = (Stage) createMultiverseButton.getScene().getWindow();
+        stage.close();
+
     }
 
 
