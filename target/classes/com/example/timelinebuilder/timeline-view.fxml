@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.timelinebuilder.TimelineController"
+            prefHeight="600.0" prefWidth="800.0">
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label fx:id="multiverseNameLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+            <HBox spacing="10">
+                <Button text="Add Universe" onAction="#handleAddUniverse"/>
+                <Button text="Add Event" onAction="#handleAddEvent"/>
+                <Button text="Refresh" onAction="#handleRefresh"/>
+                <Button text="Back to Menu" onAction="#handleBackToMenu"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <HBox fx:id="universesContainer" spacing="10">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+            </HBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

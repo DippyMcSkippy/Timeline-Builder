@@ -82,37 +82,71 @@ public class UniverseCreateController {
     }
 
     private void handleSubmit() {
+        System.out.println("Submit button clicked");
+
         String name = nameField.getText();
         int priority = priorityComboBox.getValue();
         String colorHex = hexColorField.getText();
 
+        System.out.println("Name: " + name);
+        System.out.println("Priority: " + priority);
+        System.out.println("Color: " + colorHex);
+        System.out.println("Universes folder path: " + universesFolderPath);
+
+        if (multiverseCreate != null) {
+            System.out.println("MultiverseCreate is not null");
+            System.out.println("Multiverse CSV path: " + multiverseCreate.getMultiverseCsvPath());
+        } else {
+            System.out.println("MultiverseCreate is null");
+        }
+
         if (!name.isEmpty() && universesFolderPath != null) {
-            UniverseCreate universeCreate = new UniverseCreate(universesFolderPath);
-            universeCreate.setUniverseName(name);
-            universeCreate.setUniversePriority(priority);
-            universeCreate.setUniverseColor(colorHex);
-            universeCreate.createUniverseFile();
-
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/event-create-view.fxml"));
-                Scene scene = new Scene(loader.load(), 500, 400);
+                System.out.println("Creating universe...");
+                UniverseCreate universeCreate = new UniverseCreate(universesFolderPath);
+                universeCreate.setUniverseName(name);
+                universeCreate.setUniversePriority(priority);
+                universeCreate.setUniverseColor(colorHex);
+                universeCreate.createUniverseFile();
+                System.out.println("Universe created successfully");
 
-                EventCreateController controller = loader.getController();
-                controller.setEventsFolder(universeCreate.getEventsFolder());
+                System.out.println("Events folder: " + universeCreate.getEventsFolder());
 
-                // Pass the multiverse CSV path from MultiverseCreate
-                controller.setMultiverseCsvPath(multiverseCreate.getMultiverseCsvPath());
+                try {
+                    System.out.println("Loading event creation view...");
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/event-create-view.fxml"));
+                    Scene scene = new Scene(loader.load(), 500, 400);
 
-                Stage newStage = new Stage();
-                newStage.setTitle("Create New Event");
-                newStage.setScene(scene);
-                newStage.show();
-            } catch (IOException e) {
+                    EventCreateController controller = loader.getController();
+                    controller.setEventsFolder(universeCreate.getEventsFolder());
+
+                    // Pass the multiverse CSV path from MultiverseCreate
+                    if (multiverseCreate != null && multiverseCreate.getMultiverseCsvPath() != null) {
+                        controller.setMultiverseCsvPath(multiverseCreate.getMultiverseCsvPath());
+                    } else {
+                        System.out.println("Warning: MultiverseCreate or its CSV path is null");
+                    }
+
+                    Stage newStage = new Stage();
+                    newStage.setTitle("Create New Event");
+                    newStage.setScene(scene);
+                    newStage.show();
+
+                    System.out.println("Event creation view loaded successfully");
+                } catch (IOException e) {
+                    System.err.println("Error loading event creation view: " + e.getMessage());
+                    e.printStackTrace();
+                }
+
+                Stage stage = (Stage) submitButton.getScene().getWindow();
+                stage.close();
+            } catch (Exception e) {
+                System.err.println("Error in handleSubmit: " + e.getMessage());
                 e.printStackTrace();
             }
-
-            Stage stage = (Stage) submitButton.getScene().getWindow();
-            stage.close();
+        } else {
+            System.out.println("Name is empty or universesFolderPath is null");
         }
     }
+
 }

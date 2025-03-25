@@ -2,28 +2,27 @@ package com.example.timelinebuilder;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class TimelineApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        Screen screen = Screen.getPrimary();
-        Rectangle2D bounds = screen.getVisualBounds();
+        // Always start with the main menu
         FXMLLoader fxmlLoader = new FXMLLoader(TimelineApp.class.getResource("menu-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
 
+        // Get the controller and set the stage
         MenuController controller = fxmlLoader.getController();
         controller.setStage(stage);
+
         stage.setTitle("Timeline Builder");
         stage.setScene(scene);
-        stage.setWidth(bounds.getWidth());
-        stage.setHeight(bounds.getHeight());
+
+        // Set to full screen or maximized
         stage.setMaximized(true);
+
         stage.show();
     }
 
