@@ -6,7 +6,6 @@ import javafx.stage.Stage;
 import com.example.file.MultiverseCreate;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MenuController {
@@ -22,12 +21,11 @@ public class MenuController {
     @FXML
     private Button exitButton;
 
-    @FXML Stage stage;
+    private Stage stage;
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-
 
     @FXML
     public void initialize() {
@@ -41,6 +39,11 @@ public class MenuController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/multiverse-create-view.fxml"));
             Scene scene = new Scene(loader.load(), 300, 200);
+
+            // Create MultiverseCreateController and pass the MultiverseCreate instance
+            MultiverseCreateController controller = loader.getController();
+            controller.setMenuStage(stage);
+
             Stage newStage = new Stage();
             newStage.setTitle("Create New Multiverse");
             newStage.setScene(scene);
@@ -51,7 +54,6 @@ public class MenuController {
         Stage stage = (Stage) createMultiverseButton.getScene().getWindow();
         stage.close();
     }
-
 
     private void onEditTimeline() {
         System.out.println("Load Timeline clicked!");

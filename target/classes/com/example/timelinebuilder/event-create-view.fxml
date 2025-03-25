@@ -21,7 +21,9 @@
     </HBox>
 
     <!-- Normal Event Date Controls - Initially Hidden -->
-    <VBox fx:id="normalEventControls" spacing="10" visible="false" managed="false">
+
+    <VBox fx:id="normalEventControls" spacing="10" visible="true" managed="true">
+
         <Label text="Start Date:"/>
         <HBox spacing="10" alignment="CENTER">
             <!-- Numeral Date Controls -->
