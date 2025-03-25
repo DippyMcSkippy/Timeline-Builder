@@ -11,7 +11,11 @@
             fx:controller="com.example.timelinebuilder.MultiverseDisplayController"
             prefHeight="400.0" prefWidth="600.0">
     <children>
-        <Label fx:id="multiverseNameLabel" layoutX="14.0" layoutY="14.0" text="Multiverse Name" />
-        <!-- Other UI elements can be added here -->
+        <VBox alignment="CENTER" spacing="10.0" layoutX="0.0" layoutY="0.0" prefHeight="400.0" prefWidth="600.0">
+            <children>
+                <Label fx:id="multiverseNameLabel" text="Multiverse Name" style="-fx-font-size: 24px;" />
+                <!-- Other UI elements can be added here -->
+            </children>
+        </VBox>
     </children>
 </AnchorPane>

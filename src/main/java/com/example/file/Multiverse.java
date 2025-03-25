@@ -102,8 +102,10 @@ public class Multiverse {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("MC: Multiverse folder path " + multiverseFolderPath);
-        System.out.println("MC: Universe folder Path " + universesFolderPath);
-        System.out.println("MC: Multiverse csv path " + multiverseCsvPath);
+
+        //System.out.println("M: Multiverse folder path " + multiverseFolderPath);
+        //System.out.println("C: Universe folder Path " + universesFolderPath);
+        //System.out.println("M: Multiverse csv path " + multiverseCsvPath);
+
     }
 }
