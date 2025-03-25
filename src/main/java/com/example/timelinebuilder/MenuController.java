@@ -3,10 +3,9 @@ package com.example.timelinebuilder;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import com.example.file.MultiverseCreate;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
+
 import java.io.IOException;
 
 public class MenuController {
@@ -31,13 +30,13 @@ public class MenuController {
 
     @FXML
     public void initialize() {
-        createMultiverseButton.setOnAction(e -> onCreateTimeline());
+        createMultiverseButton.setOnAction(e -> onCreateMultiverse());
         editMultiverseButton.setOnAction(e -> onEditTimeline());
         viewMultiverseButton.setOnAction(e -> onViewTimeline());
         exitButton.setOnAction(e -> onExit());
     }
 
-    private void onCreateTimeline() {
+    private void onCreateMultiverse() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/multiverse-create-view.fxml"));
             Scene scene = new Scene(loader.load(), 300, 200);
