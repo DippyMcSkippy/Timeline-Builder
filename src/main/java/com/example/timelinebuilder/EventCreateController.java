@@ -74,25 +74,30 @@ public class EventCreateController {
 
     public void setEventsFolder(String folder) {
         this.eventsFolder = folder;
+        //System.out.println("ECC setEventsFolder: Events folder set to: " + folder);
     }
 
     public void setMultiverseCsvPath(String path) {
         this.multiverseCsvPath = path;
+        //System.out.println("ECC setMultiverseCsvPath: Multiverse CSV path set to: " + path);
         multiverseGet = new MultiverseGet(multiverseCsvPath);
         setupDateControls();
     }
 
     private void setupDateControls() {
+        //System.out.println("ECC setupDateControls: Setting up date controls");
         if (multiverseGet.isNumeralDating()) {
             numeralStartDateControls.setVisible(true);
             numeralStartDateControls.setManaged(true);
             numeralEndDateControls.setVisible(true);
             numeralEndDateControls.setManaged(true);
+            //System.out.println("ECC setupDateControls: Using numeral dating");
         } else if (multiverseGet.isRelativeDating()) {
             relativeStartDateControls.setVisible(true);
             relativeStartDateControls.setManaged(true);
             relativeEndDateControls.setVisible(true);
             relativeEndDateControls.setManaged(true);
+            //System.out.println("ECC setupDateControls: Using relative dating");
 
             // Populate era dropdowns
             List<String> eras = multiverseGet.getEras();
@@ -198,6 +203,8 @@ public class EventCreateController {
     }
 
     private void handleSubmit() {
+        //System.out.println("ECC handleSubmit: Submit button clicked");
+
         String eventName = eventNameField.getText();
         String eventType = eventTypeComboBox.getValue();
 
@@ -231,9 +238,12 @@ public class EventCreateController {
 
             // Create the event file
             eventCreate.createEventFile();
+            //System.out.println("ECC handleSubmit: Event created successfully");
 
             Stage stage = (Stage) submitButton.getScene().getWindow();
             stage.close();
+        } else {
+            //System.out.println("ECC handleSubmit: Event name or type is empty");
         }
     }
 }
