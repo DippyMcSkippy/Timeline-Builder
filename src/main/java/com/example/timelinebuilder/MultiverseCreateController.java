@@ -62,14 +62,19 @@ public class MultiverseCreateController {
                         afterField.getText()
                 );
             }
-            //multiverseCreate.showDirectoryChooser(); this was removed because it would open the file manager twice
 
             multiverseCreate.createMultiverseFile();
 
-            //open universe create window
+            // Open Universe Creator window
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/universe-create-view.fxml"));
                 Scene scene = new Scene(loader.load(), 300, 200);
+
+                // Get controller and set the universes folder path
+                UniverseCreateController controller = loader.getController();
+                controller.setUniversesFolderPath(multiverseCreate.getUniversesFolderPath());
+                controller.setMultiverseCreate(multiverseCreate);  // Pass the MultiverseCreate instance
+
                 Stage newStage = new Stage();
                 newStage.setTitle("Create New Universe");
                 newStage.setScene(scene);
@@ -77,8 +82,6 @@ public class MultiverseCreateController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
 
             Stage stage = (Stage) submitButton.getScene().getWindow();
             stage.close();
