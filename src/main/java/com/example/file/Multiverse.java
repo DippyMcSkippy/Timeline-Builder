@@ -6,7 +6,7 @@ import com.opencsv.CSVWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class MultiverseCreate {
+public class Multiverse {
     private String rootPath;
     private String multiverseName;
     private String datingSystem;
@@ -18,11 +18,11 @@ public class MultiverseCreate {
     private String universesFolderPath;
     private String multiverseCsvPath;
 
-    public MultiverseCreate() {
-        showDirectoryChooser();
+    public Multiverse() {
+        // Constructor no longer shows the directory chooser
     }
 
-    //getters for files and directories
+    // Getters for files and directories
     public String getMultiverseFolderPath() {
         return multiverseFolderPath;
     }
@@ -35,10 +35,6 @@ public class MultiverseCreate {
         return multiverseCsvPath;
     }
 
-
-
-
-
     public void showDirectoryChooser() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select Save Location For Multiverse");
@@ -49,7 +45,7 @@ public class MultiverseCreate {
         }
     }
 
-    public void setMultiverseName(String name){
+    public void setMultiverseName(String name) {
         this.multiverseName = name;
     }
 
@@ -71,25 +67,23 @@ public class MultiverseCreate {
         this.afterEra = after;
     }
 
-    public void createMultiverseFile() {
+    public void createMultiverse() {
         try {
-            // set up paths
+            // Set up paths
             multiverseFolderPath = rootPath + File.separator + multiverseName;
             universesFolderPath = multiverseFolderPath + File.separator + "Universes";
             multiverseCsvPath = multiverseFolderPath + File.separator + multiverseName + ".csv";
 
-            // create directories
+            // Create directories
             File directory = new File(multiverseFolderPath);
             directory.mkdir();
             File universes = new File(universesFolderPath);
             universes.mkdir();
 
-            //create csv file
+            // Create CSV file
             CSVWriter writer = new CSVWriter(new FileWriter(multiverseCsvPath));
 
-
-
-            // write multiverse config data
+            // Write multiverse config data
             String[] header = {"Property", "Value"};
             writer.writeNext(header);
 
@@ -105,28 +99,11 @@ public class MultiverseCreate {
             }
 
             writer.close();
-
-
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Multiverse folder path "+ multiverseFolderPath);
-        System.out.println("Universe folder Path "+ universesFolderPath);
-        System.out.println("Multiverse csv path "+ multiverseCsvPath);
-
-
+        System.out.println("MC: Multiverse folder path " + multiverseFolderPath);
+        System.out.println("MC: Universe folder Path " + universesFolderPath);
+        System.out.println("MC: Multiverse csv path " + multiverseCsvPath);
     }
-
-
-
-    //Create Multiverse File in multiverse folder
-        //create csv file named the same as the multiverse name
-        //write to file the name of the
-
-
-
-    //create universes folder
-    //universe create in universe folder
 }

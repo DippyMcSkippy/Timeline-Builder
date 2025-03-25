@@ -50,6 +50,8 @@ public class MenuController {
         Stage stage = (Stage) createMultiverseButton.getScene().getWindow();
         stage.close();
 
+
+
     }
 
 

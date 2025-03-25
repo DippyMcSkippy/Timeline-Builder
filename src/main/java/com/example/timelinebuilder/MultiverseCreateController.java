@@ -1,6 +1,6 @@
 package com.example.timelinebuilder;
 
-import com.example.file.MultiverseCreate;
+import com.example.file.Multiverse;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import com.example.timelinebuilder.MultiverseDisplayController;
 import javafx.stage.Stage;
 import java.io.IOException;
 
@@ -35,7 +34,7 @@ public class MultiverseCreateController {
     private Button submitButton;
 
     private Stage menuStage;
-    private MultiverseCreate multiverseCreator;
+    private Multiverse multiverse;
 
     public void setMenuStage(Stage menuStage) {
         this.menuStage = menuStage;
@@ -43,8 +42,8 @@ public class MultiverseCreateController {
 
     @FXML
     public void initialize() {
-        // Initialize the MultiverseCreate instance
-        multiverseCreator = new MultiverseCreate();
+        // Initialize the Multiverse instance
+        multiverse = new Multiverse();
 
         datingSystem.getItems().addAll("Numeral", "Relative");
         datingSystem.setValue("Numeral");
@@ -68,18 +67,19 @@ public class MultiverseCreateController {
         }
 
         // Set multiverse properties
-        multiverseCreator.setMultiverseName(multiverseName);
-        multiverseCreator.setDatingSystem(datingSystemValue);
+        multiverse.setMultiverseName(multiverseName);
+        multiverse.setDatingSystem(datingSystemValue);
 
         if ("Relative".equals(datingSystemValue)) {
             String beforeEra = beforeField.getText();
             String duringEra = duringField.getText();
             String afterEra = afterField.getText();
-            multiverseCreator.setRelativeEras(beforeEra, duringEra, afterEra);
+            multiverse.setRelativeEras(beforeEra, duringEra, afterEra);
         }
 
-        // Create the multiverse file
-        multiverseCreator.createMultiverseFile();
+        // Show directory chooser and create the multiverse
+        multiverse.showDirectoryChooser();
+        multiverse.createMultiverse();
 
         // Open Multiverse Display window first
         try {
@@ -88,7 +88,7 @@ public class MultiverseCreateController {
 
             // Optionally, pass data to the MultiverseDisplayController
             MultiverseDisplayController controller = loader.getController();
-            // Pass any necessary data to the controller here
+            controller.initializeWithMultiverse(multiverse);
 
             Stage newStage = new Stage();
             newStage.setTitle("Multiverse Display");
