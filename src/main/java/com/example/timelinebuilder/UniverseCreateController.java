@@ -35,10 +35,19 @@ public class UniverseCreateController {
 
     @FXML
     public void initialize() {
-        // Populate priority combo box
-        priorityComboBox.getItems().addAll(1, 2, 3, 4, 5);
+        // Populate the priority dropdown with values 0-9
+        for (int i = 0; i <= 9; i++) {
+            priorityComboBox.getItems().add(i);
+        }
 
-        // Bind color picker to hex color field
+        // Set default value to 0 (highest priority)
+        priorityComboBox.setValue(0);
+
+        // Set default color
+        colorPicker.setValue(Color.BLUE);
+        hexColorField.setText(toHexString(Color.BLUE));
+
+        // Update hex field when color picker changes
         colorPicker.setOnAction(event -> {
             Color color = colorPicker.getValue();
             hexColorField.setText(toHexString(color));
