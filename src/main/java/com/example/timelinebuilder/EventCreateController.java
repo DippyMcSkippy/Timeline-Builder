@@ -3,10 +3,13 @@ package com.example.timelinebuilder;
 import com.example.file.EventCreate;
 import com.example.file.Multiverse;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 
 public class EventCreateController {
@@ -137,6 +140,25 @@ public class EventCreateController {
         }
     }
 
+    private void openMultiverseDisplay() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/multiverse-display-view.fxml"));
+            Scene scene = new Scene(loader.load(), 400, 300);
+
+            // Pass data to the MultiverseDisplayController
+            MultiverseDisplayController controller = loader.getController();
+            controller.initializeWithMultiverse(multiverse);
+
+            Stage newStage = new Stage();
+            newStage.setTitle("Multiverse Display");
+            newStage.setScene(scene);
+            newStage.setMaximized(true); // Set the new stage to full screen
+            newStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void updateDaysInMonth(ComboBox<String> monthComboBox, ComboBox<String> dayComboBox, TextField yearField) {
         String selectedMonth = monthComboBox.getValue();
         dayComboBox.getItems().clear();
@@ -248,8 +270,11 @@ public class EventCreateController {
             eventCreate.createEventFile();
             System.out.println("ECC handleSubmit: Event created successfully");
 
-            Stage stage = (Stage) submitButton.getScene().getWindow();
-            stage.close();
+            openMultiverseDisplay(); // Open the multiverse display before closing the current stage
+
+            // Close the current stage
+            Stage currentStage = (Stage) submitButton.getScene().getWindow();
+            currentStage.close();
         } else {
             System.out.println("ECC handleSubmit: Event name, type, or universe is empty");
         }

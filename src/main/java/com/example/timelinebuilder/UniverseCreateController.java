@@ -3,11 +3,14 @@ package com.example.timelinebuilder;
 import com.example.file.Multiverse;
 import com.example.file.Universe;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
 
@@ -122,13 +125,14 @@ public class UniverseCreateController {
                     newStage.show();
 
                     System.out.println("UCC handleSubmit: Event creation view loaded successfully");
+
+                    // Close the current stage
+                    Stage currentStage = (Stage) submitButton.getScene().getWindow();
+                    currentStage.close();
                 } catch (IOException e) {
                     System.err.println("UCC handleSubmit: Error loading event creation view: " + e.getMessage());
                     e.printStackTrace();
                 }
-
-                Stage stage = (Stage) submitButton.getScene().getWindow();
-                stage.close();
             } catch (Exception e) {
                 System.err.println("UCC handleSubmit: Error in handleSubmit: " + e.getMessage());
                 e.printStackTrace();

@@ -81,29 +81,6 @@ public class MultiverseCreateController {
         multiverse.showDirectoryChooser();
         multiverse.createMultiverse();
 
-        // Open Multiverse Display window first
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/multiverse-display-view.fxml"));
-            Scene scene = new Scene(loader.load(), 400, 300);
-
-            // Optionally, pass data to the MultiverseDisplayController
-            MultiverseDisplayController controller = loader.getController();
-            controller.initializeWithMultiverse(multiverse);
-
-            Stage newStage = new Stage();
-            newStage.setTitle("Multiverse Display");
-            newStage.setScene(scene);
-            newStage.setMaximized(true); // Set the new stage to full screen
-            newStage.show();
-
-            // Close the menu-view.fxml stage
-            Stage currentStage = (Stage) nameField.getScene().getWindow();
-            currentStage.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         // Open Universe Creator window and pass the Multiverse object
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/universe-create-view.fxml"));
@@ -119,5 +96,9 @@ public class MultiverseCreateController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Close the menu-view.fxml stage
+        Stage currentStage = (Stage) nameField.getScene().getWindow();
+        currentStage.close();
     }
 }

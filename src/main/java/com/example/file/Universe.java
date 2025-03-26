@@ -48,6 +48,15 @@ public class Universe {
     public String getEventsFolder() {
         return eventsFolder;
     }
+    // Getter for universe name
+    public String getUniverseName() {
+        return universeName;
+    }
+
+    // Getter for universe color
+    public String getUniverseColor() {
+        return universeColor;
+    }
 
     // Create the universe and associated files
     public void createUniverse() {

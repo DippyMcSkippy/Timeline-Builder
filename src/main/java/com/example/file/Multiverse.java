@@ -20,6 +20,8 @@ public class Multiverse {
     private String universesFolderPath;
     private String multiverseCsvPath;
 
+    private List<Universe> universes;
+
     public Multiverse() {
         // Constructor no longer shows the directory chooser
     }

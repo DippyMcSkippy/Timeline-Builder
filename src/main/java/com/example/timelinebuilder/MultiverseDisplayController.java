@@ -1,14 +1,18 @@
 package com.example.timelinebuilder;
 
 import com.example.file.Multiverse;
+import com.example.file.Universe;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +20,9 @@ public class MultiverseDisplayController {
 
     @FXML
     private Label multiverseNameLabel;
+
+    @FXML
+    private HBox universesContainer;
 
     private String multiverseFolderPath;
     private String multiverseCsvFilename;
@@ -43,6 +50,9 @@ public class MultiverseDisplayController {
         String multiverseName = getMultiverseName();
         System.out.println("MDC: Retrieved multiverse name: " + multiverseName);
         multiverseNameLabel.setText(multiverseName);
+
+        // Display universe names
+        displayUniverseNames();
     }
 
     private void loadMultiverseData() {
@@ -103,5 +113,42 @@ public class MultiverseDisplayController {
     public boolean isNumeralDating() {
         System.out.println("MDC: Checking if dating system is Numeral: " + "Numeral".equals(datingSystem));
         return "Numeral".equals(datingSystem);
+    }
+
+    private void displayUniverseNames() {
+        File universesDirectory = new File(universesFolderPath);
+        File[] universeFiles = universesDirectory.listFiles();
+
+        if (universeFiles != null) {
+            for (File universeFile : universeFiles) {
+                if (universeFile.isDirectory()) {
+                    String universeName = universeFile.getName();
+                    String universeCsvPath = universeFile.getPath() + File.separator + universeName + ".csv";
+                    String universeColor = getUniverseColorFromCsv(universeCsvPath);
+
+                    if (universeColor != null) {
+                        Text universeNameText = new Text(universeName);
+                        universeNameText.setFill(Color.web(universeColor));
+                        universeNameText.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+                        universesContainer.getChildren().add(universeNameText);
+                    }
+                }
+            }
+        }
+    }
+
+    private String getUniverseColorFromCsv(String csvPath) {
+        try (CSVReader reader = new CSVReader(new FileReader(csvPath))) {
+            String[] line;
+            while ((line = reader.readNext()) != null) {
+                if (line.length >= 2 && "Color".equals(line[0])) {
+                    return line[1];
+                }
+            }
+        } catch (IOException | CsvValidationException e) {
+            System.out.println("MDC: Error reading universe CSV file: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
     }
 }
