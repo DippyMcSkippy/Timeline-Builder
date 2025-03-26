@@ -1,16 +1,12 @@
 package com.example.timelinebuilder;
 
 import com.example.file.EventCreate;
-import com.example.file.MultiverseGet;
-import com.opencsv.exceptions.CsvValidationException;
+import com.example.file.Multiverse;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
 
 public class EventCreateController {
@@ -66,41 +62,42 @@ public class EventCreateController {
     private ComboBox<String> endDayComboBox;
 
     @FXML
+    private ComboBox<String> universeComboBox; // ComboBox for universes
+
+    @FXML
     private Button submitButton;
 
     private String eventsFolder;
-    private String multiverseCsvPath;
-    private MultiverseGet multiverseGet;
+    private Multiverse multiverse;
 
     public void setEventsFolder(String folder) {
         this.eventsFolder = folder;
-        //System.out.println("ECC setEventsFolder: Events folder set to: " + folder);
+        System.out.println("ECC setEventsFolder: Events folder set to: " + folder);
     }
 
-    public void setMultiverseCsvPath(String path) {
-        this.multiverseCsvPath = path;
-        //System.out.println("ECC setMultiverseCsvPath: Multiverse CSV path set to: " + path);
-        multiverseGet = new MultiverseGet(multiverseCsvPath);
+    public void initializeWithMultiverse(Multiverse multiverse) {
+        this.multiverse = multiverse;
         setupDateControls();
+        setupUniverses(); // Setup universes after setting multiverse
     }
 
     private void setupDateControls() {
-        //System.out.println("ECC setupDateControls: Setting up date controls");
-        if (multiverseGet.isNumeralDating()) {
+        System.out.println("ECC setupDateControls: Setting up date controls");
+        if (multiverse.isNumeralDating()) {
             numeralStartDateControls.setVisible(true);
             numeralStartDateControls.setManaged(true);
             numeralEndDateControls.setVisible(true);
             numeralEndDateControls.setManaged(true);
-            //System.out.println("ECC setupDateControls: Using numeral dating");
-        } else if (multiverseGet.isRelativeDating()) {
+            System.out.println("ECC setupDateControls: Using numeral dating");
+        } else if (multiverse.isRelativeDating()) {
             relativeStartDateControls.setVisible(true);
             relativeStartDateControls.setManaged(true);
             relativeEndDateControls.setVisible(true);
             relativeEndDateControls.setManaged(true);
-            //System.out.println("ECC setupDateControls: Using relative dating");
+            System.out.println("ECC setupDateControls: Using relative dating");
 
             // Populate era dropdowns
-            List<String> eras = multiverseGet.getEras();
+            List<String> eras = multiverse.getEras();
             startEraComboBox.getItems().addAll(eras);
             endEraComboBox.getItems().addAll(eras);
 
@@ -111,7 +108,7 @@ public class EventCreateController {
         }
 
         // Setup month dropdowns
-        List<String> months = Arrays.asList(
+        List<String> months = List.of(
                 "Unspecified", "January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"
         );
@@ -129,6 +126,15 @@ public class EventCreateController {
         endDayComboBox.getItems().add("Unspecified");
         startDayComboBox.setValue("Unspecified");
         endDayComboBox.setValue("Unspecified");
+    }
+
+    private void setupUniverses() {
+        System.out.println("ECC setupUniverses: Setting up universes");
+        List<String> universes = multiverse.getUniverses();
+        universeComboBox.getItems().addAll(universes);
+        if (!universes.isEmpty()) {
+            universeComboBox.setValue(universes.get(0));
+        }
     }
 
     private void updateDaysInMonth(ComboBox<String> monthComboBox, ComboBox<String> dayComboBox, TextField yearField) {
@@ -203,31 +209,33 @@ public class EventCreateController {
     }
 
     private void handleSubmit() {
-        //System.out.println("ECC handleSubmit: Submit button clicked");
+        System.out.println("ECC handleSubmit: Submit button clicked");
 
         String eventName = eventNameField.getText();
         String eventType = eventTypeComboBox.getValue();
+        String selectedUniverse = universeComboBox.getValue(); // Get selected universe
 
-        if (!eventName.isEmpty() && eventType != null) {
+        if (!eventName.isEmpty() && eventType != null && selectedUniverse != null) {
             EventCreate eventCreate = new EventCreate(eventsFolder);
             eventCreate.setEventName(eventName);
             eventCreate.setEventType(eventType);
+            eventCreate.setUniverseName(selectedUniverse); // Set the universe name in event create
 
             if ("Normal".equals(eventType)) {
                 // Get start date values
-                String startYear = multiverseGet.isRelativeDating() ?
+                String startYear = multiverse.isRelativeDating() ?
                         startYearRelativeField.getText() : startYearField.getText();
                 String startMonth = startMonthComboBox.getValue();
                 String startDay = startDayComboBox.getValue();
-                String startEra = multiverseGet.isRelativeDating() ?
+                String startEra = multiverse.isRelativeDating() ?
                         startEraComboBox.getValue() : null;
 
                 // Get end date values
-                String endYear = multiverseGet.isRelativeDating() ?
+                String endYear = multiverse.isRelativeDating() ?
                         endYearRelativeField.getText() : endYearField.getText();
                 String endMonth = endMonthComboBox.getValue();
                 String endDay = endDayComboBox.getValue();
-                String endEra = multiverseGet.isRelativeDating() ?
+                String endEra = multiverse.isRelativeDating() ?
                         endEraComboBox.getValue() : null;
 
                 // Set dates in event create
@@ -238,12 +246,12 @@ public class EventCreateController {
 
             // Create the event file
             eventCreate.createEventFile();
-            //System.out.println("ECC handleSubmit: Event created successfully");
+            System.out.println("ECC handleSubmit: Event created successfully");
 
             Stage stage = (Stage) submitButton.getScene().getWindow();
             stage.close();
         } else {
-            //System.out.println("ECC handleSubmit: Event name or type is empty");
+            System.out.println("ECC handleSubmit: Event name, type, or universe is empty");
         }
     }
 }

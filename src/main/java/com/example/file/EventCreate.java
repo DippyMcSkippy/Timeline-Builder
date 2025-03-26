@@ -11,6 +11,7 @@ public class EventCreate {
     private String eventsFolder;
     private String eventName;
     private String eventType;
+    private String universeName; // New field for universe name
 
     // Normal event date fields
     private String startYear;
@@ -47,6 +48,10 @@ public class EventCreate {
 
     public void setEventType(String eventType) {
         this.eventType = eventType;
+    }
+
+    public void setUniverseName(String universeName) {
+        this.universeName = universeName;
     }
 
     // Normal event setters
@@ -105,6 +110,7 @@ public class EventCreate {
             // Write basic event info
             writer.writeNext(new String[]{"Event Name", eventName});
             writer.writeNext(new String[]{"Event Type", eventType});
+            writer.writeNext(new String[]{"Universe Name", universeName}); // Add universe name to event info
 
             // Write type-specific details
             if ("Normal".equals(eventType)) {

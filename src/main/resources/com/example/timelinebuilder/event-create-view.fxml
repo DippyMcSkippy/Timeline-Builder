@@ -20,6 +20,11 @@
         <ComboBox fx:id="eventTypeComboBox" promptText="Select Event Type"/>
     </HBox>
 
+    <HBox spacing="10" alignment="CENTER">
+        <Label text="Universe:"/>
+        <ComboBox fx:id="universeComboBox" promptText="Select Universe"/>
+    </HBox>
+
     <!-- Normal Event Date Controls - Initially Visible -->
     <VBox fx:id="normalEventControls" spacing="10" visible="true" managed="true">
         <Label text="Start Date:"/>

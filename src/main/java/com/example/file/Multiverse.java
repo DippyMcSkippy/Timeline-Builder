@@ -5,6 +5,8 @@ import java.io.File;
 import com.opencsv.CSVWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Multiverse {
     private String rootPath;
@@ -42,11 +44,13 @@ public class Multiverse {
 
         if (selectedDirectory != null) {
             this.rootPath = selectedDirectory.getAbsolutePath();
+            System.out.println("M: Selected directory path: " + rootPath);
         }
     }
 
     public void setMultiverseName(String name) {
         this.multiverseName = name;
+        System.out.println("M: Multiverse name set to: " + name);
     }
 
     public String getRootPath() {
@@ -59,12 +63,14 @@ public class Multiverse {
 
     public void setDatingSystem(String system) {
         this.datingSystem = system;
+        System.out.println("M: Dating system set to: " + system);
     }
 
     public void setRelativeEras(String before, String during, String after) {
         this.beforeEra = before;
         this.duringEra = during;
         this.afterEra = after;
+        System.out.println("M: Relative eras set to - Before: " + before + ", During: " + during + ", After: " + after);
     }
 
     public void createMultiverse() {
@@ -99,13 +105,52 @@ public class Multiverse {
             }
 
             writer.close();
+            System.out.println("M: Multiverse created with name: " + multiverseName);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        //System.out.println("M: Multiverse folder path " + multiverseFolderPath);
-        //System.out.println("C: Universe folder Path " + universesFolderPath);
-        //System.out.println("M: Multiverse csv path " + multiverseCsvPath);
+        System.out.println("M: Multiverse folder path " + multiverseFolderPath);
+        System.out.println("M: Universe folder path " + universesFolderPath);
+        System.out.println("M: Multiverse CSV path " + multiverseCsvPath);
+    }
 
+    public List<String> getUniverses() {
+        List<String> universes = new ArrayList<>();
+        File folder = new File(universesFolderPath);
+        if (folder.exists() && folder.isDirectory()) {
+            File[] files = folder.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        universes.add(file.getName());
+                        System.out.println("M: Found universe: " + file.getName());
+                    }
+                }
+            }
+        }
+        return universes;
+    }
+
+    public String getDatingSystem() {
+        return datingSystem;
+    }
+
+    public List<String> getEras() {
+        List<String> eras = new ArrayList<>();
+        if ("Relative".equals(datingSystem)) {
+            if (beforeEra != null) eras.add(beforeEra);
+            if (duringEra != null) eras.add(duringEra);
+            if (afterEra != null) eras.add(afterEra);
+        }
+        return eras;
+    }
+
+    public boolean isNumeralDating() {
+        return "Numeral".equals(datingSystem);
+    }
+
+    public boolean isRelativeDating() {
+        return "Relative".equals(datingSystem);
     }
 }
