@@ -10,19 +10,19 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.timelinebuilder.MultiverseDisplayController"
-            prefHeight="400.0" prefWidth="600.0">
+            prefHeight="600.0" prefWidth="800.0">
     <children>
-        <VBox alignment="TOP_CENTER" spacing="10.0" layoutX="0.0" layoutY="0.0" prefHeight="400.0" prefWidth="600.0">
+        <VBox alignment="TOP_CENTER" spacing="10.0" layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="800.0">
             <padding>
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
             <children>
                 <Label fx:id="multiverseNameLabel" text="Multiverse Name" style="-fx-font-size: 24px; -fx-font-weight: bold;" alignment="CENTER"/>
-                <HBox fx:id="universesContainer" spacing="5.0" alignment="CENTER_LEFT">
+                <VBox fx:id="universesContainer" spacing="20.0" alignment="TOP_LEFT">
                     <padding>
                         <Insets left="10"/>
                     </padding>
-                </HBox>
+                </VBox>
                 <!-- Other UI elements can be added here -->
             </children>
         </VBox>

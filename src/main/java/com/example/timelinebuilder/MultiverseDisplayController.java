@@ -1,19 +1,29 @@
 package com.example.timelinebuilder;
 
 import com.example.file.Multiverse;
-import com.example.file.Universe;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MultiverseDisplayController {
@@ -22,7 +32,7 @@ public class MultiverseDisplayController {
     private Label multiverseNameLabel;
 
     @FXML
-    private HBox universesContainer;
+    private VBox universesContainer;
 
     private String multiverseFolderPath;
     private String multiverseCsvFilename;
@@ -51,8 +61,8 @@ public class MultiverseDisplayController {
         System.out.println("MDC: Retrieved multiverse name: " + multiverseName);
         multiverseNameLabel.setText(multiverseName);
 
-        // Display universe names
-        displayUniverseNames();
+        // Display universe names and events
+        displayUniverseNamesAndEvents();
     }
 
     private void loadMultiverseData() {
@@ -115,7 +125,7 @@ public class MultiverseDisplayController {
         return "Numeral".equals(datingSystem);
     }
 
-    private void displayUniverseNames() {
+    private void displayUniverseNamesAndEvents() {
         File universesDirectory = new File(universesFolderPath);
         File[] universeFiles = universesDirectory.listFiles();
 
@@ -127,14 +137,112 @@ public class MultiverseDisplayController {
                     String universeColor = getUniverseColorFromCsv(universeCsvPath);
 
                     if (universeColor != null) {
+                        VBox universeNameBox = new VBox();
+                        universeNameBox.setPadding(new Insets(10));
+                        universeNameBox.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                        universeNameBox.setAlignment(Pos.CENTER); // Center align the text
+
                         Text universeNameText = new Text(universeName);
                         universeNameText.setFill(Color.web(universeColor));
                         universeNameText.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-                        universesContainer.getChildren().add(universeNameText);
+                        universeNameBox.getChildren().add(universeNameText);
+
+                        universesContainer.getChildren().add(universeNameBox);
+
+                        List<Event> events = getEventsForUniverse(universeFile.getPath() + File.separator + "Events");
+                        Collections.sort(events, Comparator.comparing(Event::getStartYear));
+
+                        for (Event event : events) {
+                            VBox eventBox = new VBox();
+                            eventBox.setSpacing(5);
+                            eventBox.setPadding(new Insets(5));
+                            eventBox.setBackground(new Background(new BackgroundFill(Color.web(universeColor), new CornerRadii(5), Insets.EMPTY)));
+                            eventBox.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(5), BorderWidths.DEFAULT)));
+                            eventBox.setAlignment(Pos.CENTER); // Center align the text
+
+                            Text eventNameText = new Text(event.getName());
+                            eventNameText.setFill(Color.WHITE);
+                            eventNameText.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+                            eventBox.getChildren().add(eventNameText);
+
+                            Text eventDateText = new Text(event.getDateRange());
+                            eventDateText.setFill(Color.WHITE);
+                            eventDateText.setStyle("-fx-font-size: 12px;");
+                            eventBox.getChildren().add(eventDateText);
+
+                            universesContainer.getChildren().add(eventBox);
+                        }
                     }
                 }
             }
         }
+    }
+
+    private List<Event> getEventsForUniverse(String eventsFolderPath) {
+        List<Event> events = new ArrayList<>();
+        File eventsDirectory = new File(eventsFolderPath);
+        File[] eventFiles = eventsDirectory.listFiles();
+
+        if (eventFiles != null) {
+            for (File eventFile : eventFiles) {
+                if (eventFile.isFile() && eventFile.getName().endsWith(".csv")) {
+                    try (CSVReader reader = new CSVReader(new FileReader(eventFile))) {
+                        String[] line;
+                        Event event = new Event();
+                        while ((line = reader.readNext()) != null) {
+                            if (line.length >= 2) {
+                                switch (line[0]) {
+                                    case "Event Name":
+                                        event.setName(line[1]);
+                                        System.out.println("Event Name: " + line[1]);
+                                        break;
+                                    case "Start Year":
+                                    case "Start Month":
+                                    case "Start Day":
+                                    case "End Year":
+                                    case "End Month":
+                                    case "End Day":
+                                        if (!line[1].equalsIgnoreCase("Unspecified")) {
+                                            updateEventDate(event, line[0], line[1]);
+                                        }
+                                        break;
+                                }
+                            }
+                        }
+                        events.add(event);
+                    } catch (IOException | CsvValidationException e) {
+                        System.out.println("MDC: Error reading event CSV file: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        return events;
+    }
+
+    private void updateEventDate(Event event, String dateType, String value) {
+        switch (dateType) {
+            case "Start Year":
+                event.setStartYear(value);
+                break;
+            case "Start Month":
+                event.setStartMonth(value);
+                break;
+            case "Start Day":
+                event.setStartDay(value);
+                break;
+            case "End Year":
+                event.setEndYear(value);
+                break;
+            case "End Month":
+                event.setEndMonth(value);
+                break;
+            case "End Day":
+                event.setEndDay(value);
+                break;
+        }
+        System.out.println(dateType + ": " + value);
     }
 
     private String getUniverseColorFromCsv(String csvPath) {
@@ -150,5 +258,75 @@ public class MultiverseDisplayController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private static class Event {
+        private String name;
+        private String startYear;
+        private String startMonth;
+        private String startDay;
+        private String endYear;
+        private String endMonth;
+        private String endDay;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public void setStartYear(String startYear) {
+            this.startYear = startYear;
+        }
+
+        public void setStartMonth(String startMonth) {
+            this.startMonth = startMonth;
+        }
+
+        public void setStartDay(String startDay) {
+            this.startDay = startDay;
+        }
+
+        public void setEndYear(String endYear) {
+            this.endYear = endYear;
+        }
+
+        public void setEndMonth(String endMonth) {
+            this.endMonth = endMonth;
+        }
+
+        public void setEndDay(String endDay) {
+            this.endDay = endDay;
+        }
+
+        public Integer getStartYear() {
+            return startYear != null ? Integer.parseInt(startYear) : Integer.MAX_VALUE;
+        }
+
+        public String getDateRange() {
+            StringBuilder dateRange = new StringBuilder();
+            if (startYear != null) {
+                dateRange.append(startYear);
+                if (startMonth != null) {
+                    dateRange.append(" ").append(startMonth);
+                    if (startDay != null) {
+                        dateRange.append(" ").append(startDay);
+                    }
+                }
+            }
+            dateRange.append(" - ");
+            if (endYear != null) {
+                dateRange.append(endYear);
+                if (endMonth != null) {
+                    dateRange.append(" ").append(endMonth);
+                    if (endDay != null) {
+                        dateRange.append(" ").append(endDay);
+                    }
+                }
+            }
+            return dateRange.toString();
+        }
     }
 }
