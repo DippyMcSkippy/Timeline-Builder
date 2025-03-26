@@ -13,26 +13,22 @@ public class MenuController {
     private Button createMultiverseButton;
 
     @FXML
-    private Button editMultiverseButton;
-
-    @FXML
-    private Button viewMultiverseButton;
+    private Button openMultiverseButton;
 
     @FXML
     private Button exitButton;
 
-    @FXML Stage stage;
+    @FXML
+    private Stage stage;
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
-
     @FXML
     public void initialize() {
         createMultiverseButton.setOnAction(e -> onCreateMultiverse());
-        editMultiverseButton.setOnAction(e -> onEditTimeline());
-        viewMultiverseButton.setOnAction(e -> onViewTimeline());
+        openMultiverseButton.setOnAction(e -> onOpenMultiverse());
         exitButton.setOnAction(e -> onExit());
     }
 
@@ -49,19 +45,11 @@ public class MenuController {
         }
         Stage stage = (Stage) createMultiverseButton.getScene().getWindow();
         stage.close();
-
-
-
     }
 
-
-    private void onEditTimeline() {
-        System.out.println("Load Timeline clicked!");
-        // Add logic to load an existing timeline
-    }
-
-    private void onViewTimeline() {
-        System.out.println("viewing timeline");
+    private void onOpenMultiverse() {
+        System.out.println("Open Multiverse clicked!");
+        // Add logic to open an existing multiverse
     }
 
     private void onExit() {
