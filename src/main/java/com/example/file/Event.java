@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventCreate {
+public class Event {
     private String eventsFolder;
     private String eventName;
     private String eventType;
@@ -37,7 +37,7 @@ public class EventCreate {
     private String traveler;
 
     // Constructor
-    public EventCreate(String eventsFolder) {
+    public Event(String eventsFolder) {
         this.eventsFolder = eventsFolder;
     }
 

@@ -1,6 +1,6 @@
 package com.example.timelinebuilder;
 
-import com.example.file.EventCreate;
+import com.example.file.Event;
 import com.example.file.Multiverse;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -238,10 +238,10 @@ public class EventCreateController {
         String selectedUniverse = universeComboBox.getValue(); // Get selected universe
 
         if (!eventName.isEmpty() && eventType != null && selectedUniverse != null) {
-            EventCreate eventCreate = new EventCreate(eventsFolder);
-            eventCreate.setEventName(eventName);
-            eventCreate.setEventType(eventType);
-            eventCreate.setUniverseName(selectedUniverse); // Set the universe name in event create
+            Event event = new Event(eventsFolder);
+            event.setEventName(eventName);
+            event.setEventType(eventType);
+            event.setUniverseName(selectedUniverse); // Set the universe name in event create
 
             if ("Normal".equals(eventType)) {
                 // Get start date values
@@ -261,13 +261,13 @@ public class EventCreateController {
                         endEraComboBox.getValue() : null;
 
                 // Set dates in event create
-                eventCreate.setStartDate(startYear, startMonth, startDay, startEra);
-                eventCreate.setEndDate(endYear, endMonth, endDay, endEra);
+                event.setStartDate(startYear, startMonth, startDay, startEra);
+                event.setEndDate(endYear, endMonth, endDay, endEra);
             }
             // Add other event type handling here when implemented
 
             // Create the event file
-            eventCreate.createEventFile();
+            event.createEventFile();
             System.out.println("ECC handleSubmit: Event created successfully");
 
             openMultiverseDisplay(); // Open the multiverse display before closing the current stage
