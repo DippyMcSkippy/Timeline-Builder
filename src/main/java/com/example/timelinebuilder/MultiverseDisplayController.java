@@ -49,16 +49,16 @@ public class MultiverseDisplayController {
         this.multiverseCsvFilename = multiverse.getMultiverseCsvPath();
         this.universesFolderPath = multiverse.getUniversesFolderPath();
 
-        System.out.println("MDC: Using folder path: " + multiverseFolderPath);
-        System.out.println("MDC: Using CSV path: " + multiverseCsvFilename);
-        System.out.println("MDC: Using universes folder path: " + universesFolderPath);
+        //System.out.println("MDC: Using folder path: " + multiverseFolderPath);
+        //System.out.println("MDC: Using CSV path: " + multiverseCsvFilename);
+        //System.out.println("MDC: Using universes folder path: " + universesFolderPath);
 
         // Load multiverse data
         loadMultiverseData();
 
         // Set the multiverse name to the label
         String multiverseName = getMultiverseName();
-        System.out.println("MDC: Retrieved multiverse name: " + multiverseName);
+        //System.out.println("MDC: Retrieved multiverse name: " + multiverseName);
         multiverseNameLabel.setText(multiverseName);
 
         // Display universe names and events
@@ -66,24 +66,30 @@ public class MultiverseDisplayController {
     }
 
     private void loadMultiverseData() {
-        System.out.println("MDC: Loading multiverse data from CSV file: " + multiverseCsvFilename);
-        try (CSVReader reader = new CSVReader(new FileReader(multiverseCsvFilename))) {
+        //System.out.println("MDC: Loading multiverse data from CSV file: " + multiverseCsvFilename);
+        File csvFile = new File(multiverseCsvFilename);
+        if (!csvFile.exists()) {
+            //System.out.println("MDC: CSV file does not exist: " + multiverseCsvFilename);
+            return;
+        }
+
+        try (CSVReader reader = new CSVReader(new FileReader(csvFile))) {
             String[] line;
             try {
                 while ((line = reader.readNext()) != null) {
                     if (line.length >= 2) {
-                        System.out.println("MDC: Processing line: " + String.join(", ", line));
+                        //System.out.println("MDC: Processing line: " + String.join(", ", line));
                         if ("Multiverse Name".equals(line[0])) {
                             multiverseName = line[1];
-                            System.out.println("MDC: Multiverse Name found: " + multiverseName);
+                            //System.out.println("MDC: Multiverse Name found: " + multiverseName);
                         } else if ("Dating System".equals(line[0])) {
                             datingSystem = line[1];
-                            System.out.println("MDC: Dating System found: " + datingSystem);
+                            //System.out.println("MDC: Dating System found: " + datingSystem);
                         } else if ("Before Era".equals(line[0]) ||
                                 "During Era".equals(line[0]) ||
                                 "After Era".equals(line[0])) {
                             eras.add(line[1]);
-                            System.out.println("MDC: Era added: " + line[1]);
+                            //System.out.println("MDC: Era added: " + line[1]);
                         }
                     }
                 }
@@ -91,7 +97,7 @@ public class MultiverseDisplayController {
                 e.printStackTrace();
             }
         } catch (IOException e) {
-            System.out.println("MDC: Error loading multiverse data: " + e.getMessage());
+            //System.out.println("MDC: Error loading multiverse data: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -101,27 +107,27 @@ public class MultiverseDisplayController {
     private List<String> eras = new ArrayList<>();
 
     public String getMultiverseName() {
-        System.out.println("MDC: Getting multiverse name: " + multiverseName);
+        //System.out.println("MDC: Getting multiverse name: " + multiverseName);
         return multiverseName;
     }
 
     public String getDatingSystem() {
-        System.out.println("MDC: Getting dating system: " + datingSystem);
+        //System.out.println("MDC: Getting dating system: " + datingSystem);
         return datingSystem;
     }
 
     public List<String> getEras() {
-        System.out.println("MDC: Getting eras: " + eras);
+        //System.out.println("MDC: Getting eras: " + eras);
         return eras;
     }
 
     public boolean isRelativeDating() {
-        System.out.println("MDC: Checking if dating system is Relative: " + "Relative".equals(datingSystem));
+        //System.out.println("MDC: Checking if dating system is Relative: " + "Relative".equals(datingSystem));
         return "Relative".equals(datingSystem);
     }
 
     public boolean isNumeralDating() {
-        System.out.println("MDC: Checking if dating system is Numeral: " + "Numeral".equals(datingSystem));
+        //System.out.println("MDC: Checking if dating system is Numeral: " + "Numeral".equals(datingSystem));
         return "Numeral".equals(datingSystem);
     }
 
@@ -194,7 +200,7 @@ public class MultiverseDisplayController {
                                 switch (line[0]) {
                                     case "Event Name":
                                         event.setName(line[1]);
-                                        System.out.println("Event Name: " + line[1]);
+                                        //System.out.println("Event Name: " + line[1]);
                                         break;
                                     case "Start Year":
                                     case "Start Month":
@@ -211,7 +217,7 @@ public class MultiverseDisplayController {
                         }
                         events.add(event);
                     } catch (IOException | CsvValidationException e) {
-                        System.out.println("MDC: Error reading event CSV file: " + e.getMessage());
+                        //System.out.println("MDC: Error reading event CSV file: " + e.getMessage());
                         e.printStackTrace();
                     }
                 }
@@ -242,7 +248,7 @@ public class MultiverseDisplayController {
                 event.setEndDay(value);
                 break;
         }
-        System.out.println(dateType + ": " + value);
+        //System.out.println(dateType + ": " + value);
     }
 
     private String getUniverseColorFromCsv(String csvPath) {
@@ -254,7 +260,7 @@ public class MultiverseDisplayController {
                 }
             }
         } catch (IOException | CsvValidationException e) {
-            System.out.println("MDC: Error reading universe CSV file: " + e.getMessage());
+            //System.out.println("MDC: Error reading universe CSV file: " + e.getMessage());
             e.printStackTrace();
         }
         return null;

@@ -1,11 +1,14 @@
 package com.example.timelinebuilder;
 
+import com.example.file.Multiverse;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 
+import java.io.File;
 import java.io.IOException;
 
 public class MenuController {
@@ -28,8 +31,32 @@ public class MenuController {
     @FXML
     public void initialize() {
         createMultiverseButton.setOnAction(e -> onCreateMultiverse());
-        openMultiverseButton.setOnAction(e -> onOpenMultiverse());
         exitButton.setOnAction(e -> onExit());
+    }
+
+    @FXML
+    private void handleOpenMultiverse() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select Multiverse Folder");
+        File selectedDirectory = directoryChooser.showDialog(stage);
+
+        if (selectedDirectory != null) {
+            String multiverseFolderPath = selectedDirectory.getAbsolutePath();
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/multiverse-display-view.fxml"));
+                Scene scene = new Scene(loader.load(), 800, 600);
+                MultiverseDisplayController controller = loader.getController();
+                Multiverse multiverse = new Multiverse();
+                multiverse.setRootPath(selectedDirectory.getParent()); // Set the parent directory as the root path
+                multiverse.setMultiverseName(selectedDirectory.getName()); // Set the selected directory name as the multiverse name
+                controller.initializeWithMultiverse(multiverse);
+
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void onCreateMultiverse() {
@@ -47,13 +74,8 @@ public class MenuController {
         stage.close();
     }
 
-    private void onOpenMultiverse() {
-        System.out.println("Open Multiverse clicked!");
-        // Add logic to open an existing multiverse
-    }
-
     private void onExit() {
-        System.out.println("Exiting application...");
+        //System.out.println("Exiting application...");
         System.exit(0);
     }
 }

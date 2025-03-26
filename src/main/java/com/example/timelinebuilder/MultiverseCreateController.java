@@ -62,7 +62,7 @@ public class MultiverseCreateController {
         String datingSystemValue = datingSystem.getValue();
 
         if (multiverseName == null || multiverseName.isEmpty()) {
-            System.out.println("Multiverse name is empty");
+            //System.out.println("Multiverse name is empty");
             return;
         }
 

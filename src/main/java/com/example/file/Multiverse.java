@@ -23,7 +23,6 @@ public class Multiverse {
     private List<Universe> universes;
 
     public Multiverse() {
-        // Constructor no longer shows the directory chooser
     }
 
     // Getters for files and directories
@@ -46,13 +45,31 @@ public class Multiverse {
 
         if (selectedDirectory != null) {
             this.rootPath = selectedDirectory.getAbsolutePath();
-            //System.out.println("M: Selected directory path: " + rootPath);
+            //System.out.println("Selected directory path: " + rootPath);
         }
     }
 
     public void setMultiverseName(String name) {
         this.multiverseName = name;
-        //System.out.println("M: Multiverse name set to: " + name);
+        //System.out.println("Multiverse name set to: " + name);
+        setPaths();
+    }
+
+    public void setRootPath(String rootPath) {
+        this.rootPath = rootPath;
+        //System.out.println("Root path set to: " + rootPath);
+        setPaths();
+    }
+
+    private void setPaths() {
+        if (rootPath != null && multiverseName != null) {
+            multiverseFolderPath = rootPath + File.separator + multiverseName;
+            universesFolderPath = multiverseFolderPath + File.separator + "Universes";
+            multiverseCsvPath = multiverseFolderPath + File.separator + multiverseName + ".csv";
+            //System.out.println("Multiverse folder path: " + multiverseFolderPath);
+            //System.out.println("Universes folder path: " + universesFolderPath);
+            //System.out.println("Multiverse CSV path: " + multiverseCsvPath);
+        }
     }
 
     public String getRootPath() {
@@ -65,14 +82,14 @@ public class Multiverse {
 
     public void setDatingSystem(String system) {
         this.datingSystem = system;
-        //System.out.println("M: Dating system set to: " + system);
+        //System.out.println("Dating system set to: " + system);
     }
 
     public void setRelativeEras(String before, String during, String after) {
         this.beforeEra = before;
         this.duringEra = during;
         this.afterEra = after;
-        //System.out.println("M: Relative eras set to - Before: " + before + ", During: " + during + ", After: " + after);
+        //System.out.println("Relative eras set to - Before: " + before + ", During: " + during + ", After: " + after);
     }
 
     public void createMultiverse() {
@@ -107,14 +124,14 @@ public class Multiverse {
             }
 
             writer.close();
-            //System.out.println("M: Multiverse created with name: " + multiverseName);
+            //System.out.println("Multiverse created with name: " + multiverseName);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        //System.out.println("M: Multiverse folder path " + multiverseFolderPath);
-        //System.out.println("M: Universe folder path " + universesFolderPath);
-        //System.out.println("M: Multiverse CSV path " + multiverseCsvPath);
+        ////System.out.println("Multiverse folder path: " + multiverseFolderPath);
+        ////System.out.println("Universe folder path: " + universesFolderPath);
+        ////System.out.println("Multiverse CSV path: " + multiverseCsvPath);
     }
 
     public List<String> getUniverses() {
@@ -126,7 +143,7 @@ public class Multiverse {
                 for (File file : files) {
                     if (file.isDirectory()) {
                         universes.add(file.getName());
-                        //System.out.println("M: Found universe: " + file.getName());
+                        ////System.out.println("Found universe: " + file.getName());
                     }
                 }
             }
