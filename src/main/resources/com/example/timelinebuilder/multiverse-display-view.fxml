@@ -22,11 +22,13 @@
                     <Button fx:id="createUniverseButton" text="Create Universe" />
                     <Button fx:id="createEventButton" text="Create Event" />
                 </HBox>
-                <HBox fx:id="universesContainer" spacing="20.0" alignment="TOP_LEFT">
-                    <padding>
-                        <Insets left="10"/>
-                    </padding>
-                </HBox>
+                <ScrollPane fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" vbarPolicy="ALWAYS">
+                    <HBox fx:id="universesContainer" spacing="20.0" alignment="TOP_LEFT">
+                        <padding>
+                            <Insets left="10"/>
+                        </padding>
+                    </HBox>
+                </ScrollPane>
                 <!-- Other UI elements can be added here -->
             </children>
         </VBox>

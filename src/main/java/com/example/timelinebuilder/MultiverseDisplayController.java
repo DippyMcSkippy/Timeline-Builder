@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -181,6 +182,7 @@ public class MultiverseDisplayController {
                 // Display the events for this universe
                 LinkedList<String[]> events = GlobalConfig.getEventLinkedList(universeName);
                 if (events != null) {
+                    Collections.reverse(events); // Reverse the order of events to display earlier events at the top
                     for (String[] event : events) {
                         VBox eventBox = new VBox();
                         eventBox.setSpacing(5);
