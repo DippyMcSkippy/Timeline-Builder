@@ -11,6 +11,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import com.example.config.GlobalConfig;
 
 import java.io.IOException;
 
@@ -105,6 +106,8 @@ public class UniverseCreateController {
                 universe.setUniverseColor(colorHex);
                 universe.createUniverse();
                 System.out.println("UCC handleSubmit: Universe created successfully");
+
+                GlobalConfig.addUniverse(name, priority);
 
                 System.out.println("UCC handleSubmit: Events folder: " + universe.getEventsFolder());
 

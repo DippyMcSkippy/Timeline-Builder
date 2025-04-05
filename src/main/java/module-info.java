@@ -15,4 +15,6 @@ module com.example.timelinebuilder {
 
     opens com.example.timelinebuilder to javafx.fxml;
     exports com.example.timelinebuilder;
+    exports com.example.config;
+    opens com.example.config to javafx.fxml;
 }

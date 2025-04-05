@@ -52,6 +52,7 @@ public class MenuController {
                 controller.initializeWithMultiverse(multiverse);
 
                 stage.setScene(scene);
+                stage.setMaximized(true);
                 stage.show();
             } catch (IOException e) {
                 e.printStackTrace();

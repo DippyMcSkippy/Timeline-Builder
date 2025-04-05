@@ -11,7 +11,7 @@ public class Event {
     private String eventsFolder;
     private String eventName;
     private String eventType;
-    private String universeName; // New field for universe name
+    private String universeName;
 
     // Normal event date fields
     private String startYear;
@@ -24,17 +24,7 @@ public class Event {
     private String endDay;
     private String endEra;
 
-    // Incursion event fields
-    private String sourceUniverse;
-    private String targetUniverse;
 
-    // Nexus event fields
-    private List<String> connectedUniverses = new ArrayList<>();
-
-    // Travel event fields
-    private String originUniverse;
-    private String destinationUniverse;
-    private String traveler;
 
     // Constructor
     public Event(String eventsFolder) {
@@ -69,28 +59,6 @@ public class Event {
         this.endEra = era;
     }
 
-    // Incursion event setters
-    public void setIncursionDetails(String sourceUniverse, String targetUniverse) {
-        this.sourceUniverse = sourceUniverse;
-        this.targetUniverse = targetUniverse;
-    }
-
-    // Nexus event setters
-    public void addConnectedUniverse(String universe) {
-        connectedUniverses.add(universe);
-    }
-
-    public void setConnectedUniverses(List<String> universes) {
-        this.connectedUniverses = new ArrayList<>(universes);
-    }
-
-    // Travel event setters
-    public void setTravelDetails(String originUniverse, String destinationUniverse, String traveler) {
-        this.originUniverse = originUniverse;
-        this.destinationUniverse = destinationUniverse;
-        this.traveler = traveler;
-    }
-
     // Create the event file
     public void createEventFile() {
         if (eventName == null || eventName.isEmpty() || eventType == null || eventType.isEmpty()) {
@@ -99,7 +67,11 @@ public class Event {
         }
 
         try {
-            String eventFilePath = eventsFolder + File.separator + eventName.replaceAll("[^a-zA-Z0-9]", "_") + ".csv";
+            String eventFilePath = eventsFolder + File.separator + universeName + File.separator + "Events" + File.separator + eventName.replaceAll("[^a-zA-Z0-9]", "_") + ".csv";
+            File eventDir = new File(eventsFolder + File.separator + universeName + File.separator + "Events");
+            if (!eventDir.exists()) {
+                eventDir.mkdirs();
+            }
 
             CSVWriter writer = new CSVWriter(new FileWriter(eventFilePath));
 
@@ -115,12 +87,8 @@ public class Event {
             // Write type-specific details
             if ("Normal".equals(eventType)) {
                 writeNormalEventDetails(writer);
-            } else if ("Incursion".equals(eventType)) {
-                writeIncursionEventDetails(writer);
-            } else if ("Nexus".equals(eventType)) {
-                writeNexusEventDetails(writer);
-            } else if ("Travel".equals(eventType)) {
-                writeTravelEventDetails(writer);
+            } else {
+                System.err.println("Unknown event type: " + eventType);
             }
 
             writer.close();
@@ -160,30 +128,5 @@ public class Event {
         }
     }
 
-    private void writeIncursionEventDetails(CSVWriter writer) {
-        if (sourceUniverse != null) {
-            writer.writeNext(new String[]{"Source Universe", sourceUniverse});
-        }
-        if (targetUniverse != null) {
-            writer.writeNext(new String[]{"Target Universe", targetUniverse});
-        }
-    }
 
-    private void writeNexusEventDetails(CSVWriter writer) {
-        for (int i = 0; i < connectedUniverses.size(); i++) {
-            writer.writeNext(new String[]{"Connected Universe " + (i + 1), connectedUniverses.get(i)});
-        }
-    }
-
-    private void writeTravelEventDetails(CSVWriter writer) {
-        if (originUniverse != null) {
-            writer.writeNext(new String[]{"Origin Universe", originUniverse});
-        }
-        if (destinationUniverse != null) {
-            writer.writeNext(new String[]{"Destination Universe", destinationUniverse});
-        }
-        if (traveler != null) {
-            writer.writeNext(new String[]{"Traveler", traveler});
-        }
-    }
 }

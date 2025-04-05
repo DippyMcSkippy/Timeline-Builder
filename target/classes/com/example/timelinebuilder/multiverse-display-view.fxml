@@ -18,11 +18,15 @@
             </padding>
             <children>
                 <Label fx:id="multiverseNameLabel" text="Multiverse Name" style="-fx-font-size: 24px; -fx-font-weight: bold;" alignment="CENTER"/>
-                <VBox fx:id="universesContainer" spacing="20.0" alignment="TOP_LEFT">
+                <HBox spacing="10">
+                    <Button fx:id="createUniverseButton" text="Create Universe" />
+                    <Button fx:id="createEventButton" text="Create Event" />
+                </HBox>
+                <HBox fx:id="universesContainer" spacing="20.0" alignment="TOP_LEFT">
                     <padding>
                         <Insets left="10"/>
                     </padding>
-                </VBox>
+                </HBox>
                 <!-- Other UI elements can be added here -->
             </children>
         </VBox>

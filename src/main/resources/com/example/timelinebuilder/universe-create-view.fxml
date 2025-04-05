@@ -22,7 +22,7 @@
     </HBox>
 
     <HBox spacing="10" alignment="CENTER">
-        <Label text="Universe Color:"/>
+        <Label text="Color:"/>
         <ColorPicker fx:id="colorPicker"/>
         <TextField fx:id="hexColorField" promptText="Hex Color (e.g. #FF5733)" prefWidth="150"/>
     </HBox>

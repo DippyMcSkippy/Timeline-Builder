@@ -2,6 +2,7 @@ package com.example.timelinebuilder;
 
 import com.example.file.Event;
 import com.example.file.Multiverse;
+import com.example.config.GlobalConfig;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,6 +11,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
 import java.util.List;
 
 public class EventCreateController {
@@ -152,7 +156,7 @@ public class EventCreateController {
             Stage newStage = new Stage();
             newStage.setTitle("Multiverse Display");
             newStage.setScene(scene);
-            newStage.setMaximized(true); // Set the new stage to full screen
+            newStage.setMaximized(true);
             newStage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -204,10 +208,13 @@ public class EventCreateController {
     }
 
     private boolean isLeapYear(int year) {
-        // Complex leap year rule
-        if (year % 1000 == 0) return true;
-        if (year % 400 == 0) return false;
-        return year % 4 == 0;
+        // dumb ass leap year rules
+        var leap = year % 4 == 0;
+        if (year % 100 == 0){
+            leap = false;}
+        if (year % 400 == 0) {
+            leap = true;}
+        return leap;
     }
 
     @FXML
@@ -243,32 +250,29 @@ public class EventCreateController {
             event.setEventType(eventType);
             event.setUniverseName(selectedUniverse); // Set the universe name in event create
 
-            if ("Normal".equals(eventType)) {
-                // Get start date values
-                String startYear = multiverse.isRelativeDating() ?
-                        startYearRelativeField.getText() : startYearField.getText();
-                String startMonth = startMonthComboBox.getValue();
-                String startDay = startDayComboBox.getValue();
-                String startEra = multiverse.isRelativeDating() ?
-                        startEraComboBox.getValue() : null;
+            String startYear = multiverse.isRelativeDating() ? startYearRelativeField.getText() : startYearField.getText();
+            String startMonth = startMonthComboBox.getValue();
+            String startDay = startDayComboBox.getValue();
+            String startEra = multiverse.isRelativeDating() ? startEraComboBox.getValue() : null;
 
-                // Get end date values
-                String endYear = multiverse.isRelativeDating() ?
-                        endYearRelativeField.getText() : endYearField.getText();
-                String endMonth = endMonthComboBox.getValue();
-                String endDay = endDayComboBox.getValue();
-                String endEra = multiverse.isRelativeDating() ?
-                        endEraComboBox.getValue() : null;
+            String endYear = multiverse.isRelativeDating() ? endYearRelativeField.getText() : endYearField.getText();
+            String endMonth = endMonthComboBox.getValue();
+            String endDay = endDayComboBox.getValue();
+            String endEra = multiverse.isRelativeDating() ? endEraComboBox.getValue() : null;
 
-                // Set dates in event create
-                event.setStartDate(startYear, startMonth, startDay, startEra);
-                event.setEndDate(endYear, endMonth, endDay, endEra);
-            }
-            // Add other event type handling here when implemented
+            // Set dates in event create
+            event.setStartDate(startYear, startMonth, startDay, startEra);
+            event.setEndDate(endYear, endMonth, endDay, endEra);
 
             // Create the event file
             event.createEventFile();
             System.out.println("ECC handleSubmit: Event created successfully");
+
+            // Calculate the size (difference between start and end dates in days)
+            int size = calculateSize(startYear, startMonth, startDay, endYear, endMonth, endDay);
+
+            // Add event to the global linked list for the universe in chronological order
+            addEventToUniverseLinkedList(eventName, startYear, startMonth, startDay, endYear, endMonth, endDay, size, selectedUniverse);
 
             openMultiverseDisplay(); // Open the multiverse display before closing the current stage
 
@@ -278,5 +282,79 @@ public class EventCreateController {
         } else {
             System.out.println("ECC handleSubmit: Event name, type, or universe is empty");
         }
+    }
+
+    private void addEventToUniverseLinkedList(String eventName, String startYear, String startMonth, String startDay, String endYear, String endMonth, String endDay, int size, String universeName) {
+        LinkedList<String[]> eventLinkedList = GlobalConfig.getEventLinkedList(universeName);
+
+        if (eventLinkedList == null) {
+            eventLinkedList = new LinkedList<>();
+            GlobalConfig.eventLinkedLists.put(universeName + "eventLinkedList", eventLinkedList);
+        }
+
+        String[] newEvent = {eventName, startYear, startMonth, startDay, endYear, endMonth, endDay, String.valueOf(size)};
+        int index = 0;
+        for (String[] event : eventLinkedList) {
+            LocalDate eventEndDate = LocalDate.of(Integer.parseInt(event[4]), convertMonthToNumber(event[5]), Integer.parseInt(event[6]));
+            LocalDate newEventStartDate = LocalDate.of(Integer.parseInt(startYear), convertMonthToNumber(startMonth), Integer.parseInt(startDay));
+
+            if (eventEndDate.isBefore(newEventStartDate) || eventEndDate.isEqual(newEventStartDate)) {
+                break;
+            }
+            index++;
+        }
+        eventLinkedList.add(index, newEvent);
+    }
+
+    private int calculateSize(String startYear, String startMonth, String startDay, String endYear, String endMonth, String endDay) {
+        LocalDate startDate = LocalDate.of(Integer.parseInt(startYear), convertMonthToNumber(startMonth), Integer.parseInt(startDay));
+        LocalDate endDate = LocalDate.of(Integer.parseInt(endYear), convertMonthToNumber(endMonth), Integer.parseInt(endDay));
+        return calculateDaysBetween(startDate, endDate);
+    }
+
+    private int calculateDaysBetween(LocalDate startDate, LocalDate endDate) {
+        int daysBetween = 0;
+        while (!startDate.isAfter(endDate)) {
+            daysBetween++;
+            startDate = startDate.plusDays(1);
+        }
+        return daysBetween;
+    }
+
+    private int convertMonthToNumber(String month) {
+        switch (month) {
+            case "January":
+                return 1;
+            case "February":
+                return 2;
+            case "March":
+                return 3;
+            case "April":
+                return 4;
+            case "May":
+                return 5;
+            case "June":
+                return 6;
+            case "July":
+                return 7;
+            case "August":
+                return 8;
+            case "September":
+                return 9;
+            case "October":
+                return 10;
+            case "November":
+                return 11;
+            case "December":
+                return 12;
+            default:
+                return 1; // Default to January if unspecified
+        }
+    }
+
+    private int compareDates(String year1, String month1, String day1, String year2, String month2, String day2) {
+        LocalDate date1 = LocalDate.of(Integer.parseInt(year1), convertMonthToNumber(month1), Integer.parseInt(day1));
+        LocalDate date2 = LocalDate.of(Integer.parseInt(year2), convertMonthToNumber(month2), Integer.parseInt(day2));
+        return date1.compareTo(date2);
     }
 }

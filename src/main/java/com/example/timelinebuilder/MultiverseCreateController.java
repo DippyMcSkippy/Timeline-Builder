@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
+import com.example.config.GlobalConfig;
 
 public class MultiverseCreateController {
     @FXML
