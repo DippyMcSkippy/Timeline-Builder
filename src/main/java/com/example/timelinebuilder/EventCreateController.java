@@ -116,23 +116,25 @@ public class EventCreateController {
 
         // Setup month dropdowns
         List<String> months = List.of(
-                "Unspecified", "January", "February", "March", "April", "May", "June",
+                "January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"
         );
         startMonthComboBox.getItems().addAll(months);
         endMonthComboBox.getItems().addAll(months);
-        startMonthComboBox.setValue("Unspecified");
-        endMonthComboBox.setValue("Unspecified");
+        startMonthComboBox.setValue("January");
+        endMonthComboBox.setValue("January");
 
         // Add listeners for month changes to update days
         startMonthComboBox.setOnAction(e -> updateDaysInMonth(startMonthComboBox, startDayComboBox, startYearField));
         endMonthComboBox.setOnAction(e -> updateDaysInMonth(endMonthComboBox, endDayComboBox, endYearField));
 
-        // Initialize days to "Unspecified"
-        startDayComboBox.getItems().add("Unspecified");
-        endDayComboBox.getItems().add("Unspecified");
-        startDayComboBox.setValue("Unspecified");
-        endDayComboBox.setValue("Unspecified");
+        // Initialize days to "1"
+        for (int i = 1; i <= 31; i++) {
+            startDayComboBox.getItems().add(String.valueOf(i));
+            endDayComboBox.getItems().add(String.valueOf(i));
+        }
+        startDayComboBox.setValue("1");
+        endDayComboBox.setValue("1");
     }
 
     private void setupUniverses() {
@@ -166,12 +168,6 @@ public class EventCreateController {
     private void updateDaysInMonth(ComboBox<String> monthComboBox, ComboBox<String> dayComboBox, TextField yearField) {
         String selectedMonth = monthComboBox.getValue();
         dayComboBox.getItems().clear();
-        dayComboBox.getItems().add("Unspecified");
-
-        if ("Unspecified".equals(selectedMonth)) {
-            dayComboBox.setValue("Unspecified");
-            return;
-        }
 
         int daysInMonth;
         switch (selectedMonth) {
