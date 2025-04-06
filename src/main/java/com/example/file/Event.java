@@ -4,8 +4,6 @@ import com.opencsv.CSVWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Event {
     private String eventsFolder;
@@ -24,11 +22,10 @@ public class Event {
     private String endDay;
     private String endEra;
 
-
-
     // Constructor
     public Event(String eventsFolder) {
         this.eventsFolder = eventsFolder;
+        //System.out.println("Event Constructor: Events folder set to: " + eventsFolder);
     }
 
     // Basic setters
@@ -67,10 +64,13 @@ public class Event {
         }
 
         try {
-            String eventFilePath = eventsFolder + File.separator + universeName + File.separator + "Events" + File.separator + eventName.replaceAll("[^a-zA-Z0-9]", "_") + ".csv";
-            File eventDir = new File(eventsFolder + File.separator + universeName + File.separator + "Events");
+            String eventFilePath = eventsFolder + File.separator + eventName.replaceAll("[^a-zA-Z0-9]", "_") + ".csv";
+            //.println("Event createEventFile: Event file path - " + eventFilePath);
+
+            File eventDir = new File(eventsFolder);
             if (!eventDir.exists()) {
                 eventDir.mkdirs();
+                //System.out.println("Event createEventFile: Created directories - " + eventDir.getAbsolutePath());
             }
 
             CSVWriter writer = new CSVWriter(new FileWriter(eventFilePath));
@@ -127,6 +127,4 @@ public class Event {
             writer.writeNext(new String[]{"End Era", endEra});
         }
     }
-
-
 }

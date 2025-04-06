@@ -87,11 +87,13 @@ public class MultiverseDisplayController {
     }
 
     private void openEventCreateScreen() {
+        System.out.println("MDC openEventCreateScreen: Add event button clicked");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/event-create-view.fxml"));
             Scene scene = new Scene(loader.load(), 500, 400);
 
             EventCreateController controller = loader.getController();
+            System.out.println("MDC openEventCreateScreen: Setting events folder path - " + multiverse.getUniversesFolderPath() + File.separator + "Events");
             controller.setEventsFolder(multiverse.getUniversesFolderPath() + File.separator + "Events");
             controller.initializeWithMultiverse(multiverse); // Properly pass the multiverse object
 
@@ -99,8 +101,10 @@ public class MultiverseDisplayController {
             newStage.setTitle("Create New Event");
             newStage.setScene(scene);
             newStage.show();
+            System.out.println("MDC openEventCreateScreen: Event creation view loaded successfully");
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("MDC openEventCreateScreen: Failed to load event creation view");
         }
     }
 
