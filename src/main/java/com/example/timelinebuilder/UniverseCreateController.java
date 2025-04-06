@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import com.example.config.GlobalConfig;
 
 import java.io.IOException;
+import java.io.File;
 
 public class UniverseCreateController {
     @FXML
@@ -109,7 +110,8 @@ public class UniverseCreateController {
 
                 GlobalConfig.addUniverse(name, priority);
 
-                System.out.println("UCC handleSubmit: Events folder: " + universe.getEventsFolder());
+                String eventsFolderPath = universe.getEventsFolder();
+                System.out.println("UCC handleSubmit: Events folder: " + eventsFolderPath);
 
                 try {
                     System.out.println("UCC handleSubmit: Loading event creation view...");
@@ -117,7 +119,7 @@ public class UniverseCreateController {
                     Scene scene = new Scene(loader.load(), 500, 400);
 
                     EventCreateController controller = loader.getController();
-                    controller.setEventsFolder(universe.getEventsFolder());
+                    controller.setEventsFolder(eventsFolderPath);
 
                     // Pass the multiverse object
                     controller.initializeWithMultiverse(multiverse);

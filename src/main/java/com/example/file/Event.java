@@ -25,7 +25,7 @@ public class Event {
     // Constructor
     public Event(String eventsFolder) {
         this.eventsFolder = eventsFolder;
-        //System.out.println("Event Constructor: Events folder set to: " + eventsFolder);
+        System.out.println("Event Constructor: Events folder set to: " + eventsFolder);
     }
 
     // Basic setters
@@ -65,12 +65,12 @@ public class Event {
 
         try {
             String eventFilePath = eventsFolder + File.separator + eventName.replaceAll("[^a-zA-Z0-9]", "_") + ".csv";
-            //.println("Event createEventFile: Event file path - " + eventFilePath);
+            System.out.println("Event createEventFile: Event file path - " + eventFilePath);
 
             File eventDir = new File(eventsFolder);
             if (!eventDir.exists()) {
                 eventDir.mkdirs();
-                //System.out.println("Event createEventFile: Created directories - " + eventDir.getAbsolutePath());
+                System.out.println("Event createEventFile: Created directories - " + eventDir.getAbsolutePath());
             }
 
             CSVWriter writer = new CSVWriter(new FileWriter(eventFilePath));

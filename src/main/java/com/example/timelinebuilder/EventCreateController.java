@@ -89,18 +89,27 @@ public class EventCreateController {
 
     private void setupDateControls() {
         System.out.println("ECC setupDateControls: Setting up date controls");
+
         if (multiverse.isNumeralDating()) {
+            System.out.println("ECC setupDateControls: Using numeral dating");
             numeralStartDateControls.setVisible(true);
             numeralStartDateControls.setManaged(true);
+            startYearField.setVisible(true);
+            startYearField.setManaged(true);
             numeralEndDateControls.setVisible(true);
             numeralEndDateControls.setManaged(true);
-            System.out.println("ECC setupDateControls: Using numeral dating - numeralStartDateControls and numeralEndDateControls set to visible and managed");
+            endYearField.setVisible(true);
+            endYearField.setManaged(true);
         } else if (multiverse.isRelativeDating()) {
+            System.out.println("ECC setupDateControls: Using relative dating");
             relativeStartDateControls.setVisible(true);
             relativeStartDateControls.setManaged(true);
+            startYearRelativeField.setVisible(true);
+            startYearRelativeField.setManaged(true);
             relativeEndDateControls.setVisible(true);
             relativeEndDateControls.setManaged(true);
-            System.out.println("ECC setupDateControls: Using relative dating - relativeStartDateControls and relativeEndDateControls set to visible and managed");
+            endYearRelativeField.setVisible(true);
+            endYearRelativeField.setManaged(true);
 
             // Populate era dropdowns
             List<String> eras = multiverse.getEras();
@@ -134,6 +143,36 @@ public class EventCreateController {
         }
         startDayComboBox.setValue("1");
         endDayComboBox.setValue("1");
+
+        System.out.println("ECC setupDateControls: Date controls setup complete");
+    }
+
+    private void setupUniverses() {
+        System.out.println("ECC setupUniverses: Setting up universes");
+        List<String> universes = multiverse.getUniverses();
+        universeComboBox.getItems().addAll(universes);
+        if (!universes.isEmpty()) {
+            universeComboBox.setValue(universes.get(0));
+        }
+    }
+
+    private void openMultiverseDisplay() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/multiverse-display-view.fxml"));
+            Scene scene = new Scene(loader.load(), 400, 300);
+
+            // Pass data to the MultiverseDisplayController
+            MultiverseDisplayController controller = loader.getController();
+            controller.initializeWithMultiverse(multiverse);
+
+            Stage newStage = new Stage();
+            newStage.setTitle("Multiverse Display");
+            newStage.setScene(scene);
+            newStage.setMaximized(true);
+            newStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateDaysInMonth(ComboBox<String> monthComboBox, ComboBox<String> dayComboBox, TextField yearField) {
@@ -183,34 +222,6 @@ public class EventCreateController {
             leap = true;
         }
         return leap;
-    }
-
-    private void setupUniverses() {
-        System.out.println("ECC setupUniverses: Setting up universes");
-        List<String> universes = multiverse.getUniverses();
-        universeComboBox.getItems().addAll(universes);
-        if (!universes.isEmpty()) {
-            universeComboBox.setValue(universes.get(0));
-        }
-    }
-
-    private void openMultiverseDisplay() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/multiverse-display-view.fxml"));
-            Scene scene = new Scene(loader.load(), 400, 300);
-
-            // Pass data to the MultiverseDisplayController
-            MultiverseDisplayController controller = loader.getController();
-            controller.initializeWithMultiverse(multiverse);
-
-            Stage newStage = new Stage();
-            newStage.setTitle("Multiverse Display");
-            newStage.setScene(scene);
-            newStage.setMaximized(true);
-            newStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML
