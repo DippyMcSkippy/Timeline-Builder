@@ -50,7 +50,6 @@ public class MultiverseDisplayController {
 
     @FXML
     public void initialize() {
-        // This method will be empty if we are initializing with Multiverse
         createUniverseButton.setOnAction(e -> openUniverseCreateScreen());
         createEventButton.setOnAction(e -> openEventCreateScreen());
     }
@@ -75,7 +74,7 @@ public class MultiverseDisplayController {
             Scene scene = new Scene(loader.load(), 500, 400);
 
             UniverseCreateController controller = loader.getController();
-            controller.setMultiverse(multiverse); // Properly pass the multiverse object
+            controller.setMultiverse(multiverse);
 
             Stage newStage = new Stage();
             newStage.setTitle("Create New Universe");
@@ -87,24 +86,20 @@ public class MultiverseDisplayController {
     }
 
     private void openEventCreateScreen() {
-        System.out.println("MDC openEventCreateScreen: Add event button clicked");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/timelinebuilder/event-create-view.fxml"));
             Scene scene = new Scene(loader.load(), 500, 400);
 
             EventCreateController controller = loader.getController();
-            System.out.println("MDC openEventCreateScreen: Setting events folder path - " + multiverse.getUniversesFolderPath() + File.separator + "Events");
             controller.setEventsFolder(multiverse.getUniversesFolderPath() + File.separator + "Events");
-            controller.initializeWithMultiverse(multiverse); // Properly pass the multiverse object
+            controller.initializeWithMultiverse(multiverse);
 
             Stage newStage = new Stage();
             newStage.setTitle("Create New Event");
             newStage.setScene(scene);
             newStage.show();
-            System.out.println("MDC openEventCreateScreen: Event creation view loaded successfully");
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("MDC openEventCreateScreen: Failed to load event creation view");
         }
     }
 
@@ -135,6 +130,21 @@ public class MultiverseDisplayController {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        // Update multiverse object with loaded data
+        multiverse.setMultiverseName(multiverseName);
+        multiverse.setDatingSystem(datingSystem);
+        if (isRelativeDating()) {
+            if (eras.size() >= 3) {
+                multiverse.setRelativeEras(eras.get(0), eras.get(1), eras.get(2));
+            } else {
+                multiverse.setRelativeEras(
+                        eras.size() > 0 ? eras.get(0) : null,
+                        eras.size() > 1 ? eras.get(1) : null,
+                        eras.size() > 2 ? eras.get(2) : null
+                );
+            }
         }
     }
 
@@ -186,18 +196,18 @@ public class MultiverseDisplayController {
                 // Display the events for this universe
                 LinkedList<String[]> events = GlobalConfig.getEventLinkedList(universeName);
                 if (events != null) {
-                    Collections.reverse(events); // Reverse the order of events to display earlier events at the top
+                    Collections.reverse(events);
                     for (String[] event : events) {
                         VBox eventBox = new VBox();
                         eventBox.setSpacing(5);
                         eventBox.setPadding(new Insets(5));
                         eventBox.setBackground(new Background(new BackgroundFill(Color.web(universeColor), new CornerRadii(5), Insets.EMPTY)));
                         eventBox.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(5), BorderWidths.DEFAULT)));
-                        eventBox.setAlignment(Pos.CENTER); // Center align the text
+                        eventBox.setAlignment(Pos.CENTER);
 
                         // Set the height of the event box based on the size parameter
                         int size = Integer.parseInt(event[7]);
-                        eventBox.setPrefHeight(size * 10); // Adjust the multiplier as needed for visual clarity
+                        eventBox.setPrefHeight(size * 10);
 
                         Text eventNameText = new Text(event[0]);
                         eventNameText.setFill(Color.WHITE);

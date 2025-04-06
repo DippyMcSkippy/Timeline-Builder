@@ -9,10 +9,9 @@
 <?import javafx.geometry.Insets?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.timelinebuilder.MultiverseDisplayController"
-            prefHeight="600.0" prefWidth="800.0">
+            fx:controller="com.example.timelinebuilder.MultiverseDisplayController">
     <children>
-        <VBox alignment="TOP_CENTER" spacing="10.0" layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="800.0">
+        <VBox alignment="TOP_CENTER" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
             <padding>
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
@@ -23,7 +22,7 @@
                     <Button fx:id="createEventButton" text="Create Event" />
                 </HBox>
                 <ScrollPane fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" vbarPolicy="ALWAYS">
-                    <HBox fx:id="universesContainer" spacing="20.0" alignment="TOP_LEFT">
+                    <HBox fx:id="universesContainer" spacing="20.0" alignment="TOP_CENTER">
                         <padding>
                             <Insets left="10"/>
                         </padding>

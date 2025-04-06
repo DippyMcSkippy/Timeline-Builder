@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -78,7 +79,6 @@ public class EventCreateController {
 
     public void setEventsFolder(String folder) {
         this.eventsFolder = folder;
-        System.out.println("ECC setEventsFolder: Events folder set to: " + folder);
     }
 
     public void initializeWithMultiverse(Multiverse multiverse) {
@@ -88,10 +88,7 @@ public class EventCreateController {
     }
 
     private void setupDateControls() {
-        System.out.println("ECC setupDateControls: Setting up date controls");
-
         if (multiverse.isNumeralDating()) {
-            System.out.println("ECC setupDateControls: Using numeral dating");
             numeralStartDateControls.setVisible(true);
             numeralStartDateControls.setManaged(true);
             startYearField.setVisible(true);
@@ -101,7 +98,6 @@ public class EventCreateController {
             endYearField.setVisible(true);
             endYearField.setManaged(true);
         } else if (multiverse.isRelativeDating()) {
-            System.out.println("ECC setupDateControls: Using relative dating");
             relativeStartDateControls.setVisible(true);
             relativeStartDateControls.setManaged(true);
             startYearRelativeField.setVisible(true);
@@ -143,12 +139,9 @@ public class EventCreateController {
         }
         startDayComboBox.setValue("1");
         endDayComboBox.setValue("1");
-
-        System.out.println("ECC setupDateControls: Date controls setup complete");
     }
 
     private void setupUniverses() {
-        System.out.println("ECC setupUniverses: Setting up universes");
         List<String> universes = multiverse.getUniverses();
         universeComboBox.getItems().addAll(universes);
         if (!universes.isEmpty()) {
@@ -245,33 +238,30 @@ public class EventCreateController {
     }
 
     private void handleSubmit() {
-        System.out.println("ECC handleSubmit: Submit button clicked");
-
         String eventName = eventNameField.getText();
         String eventType = eventTypeComboBox.getValue();
         String selectedUniverse = universeComboBox.getValue(); // Get selected universe
 
         if (!eventName.isEmpty() && eventType != null && selectedUniverse != null) {
-            Event event = new Event(eventsFolder);
+            // Set the correct events folder path based on the selected universe
+            String universeEventsFolder = multiverse.getUniversesFolderPath() + File.separator + selectedUniverse + File.separator + "Events";
+            Event event = new Event(universeEventsFolder);
             event.setEventName(eventName);
             event.setEventType(eventType);
             event.setUniverseName(selectedUniverse); // Set the universe name in event create
 
-            System.out.println("ECC handleSubmit: Creating event in folder - " + eventsFolder);
-
-            String startYear = multiverse.isRelativeDating() ? startYearRelativeField.getText() : startYearField.getText();
+            String startYear = formatYear(multiverse.isRelativeDating() ? startYearRelativeField.getText() : startYearField.getText());
             String startMonth = startMonthComboBox.getValue();
             String startDay = startDayComboBox.getValue();
             String startEra = multiverse.isRelativeDating() ? startEraComboBox.getValue() : null;
 
-            String endYear = multiverse.isRelativeDating() ? endYearRelativeField.getText() : endYearField.getText();
+            String endYear = formatYear(multiverse.isRelativeDating() ? endYearRelativeField.getText() : endYearField.getText());
             String endMonth = endMonthComboBox.getValue();
             String endDay = endDayComboBox.getValue();
             String endEra = multiverse.isRelativeDating() ? endEraComboBox.getValue() : null;
 
             // Ensure year fields are not empty
             if (startYear.isEmpty() || endYear.isEmpty()) {
-                System.out.println("ECC handleSubmit: Year fields are empty");
                 return;
             }
 
@@ -281,7 +271,6 @@ public class EventCreateController {
 
             // Create the event file
             event.createEventFile();
-            System.out.println("ECC handleSubmit: Event created successfully");
 
             // Calculate the size (difference between start and end dates in days)
             int size = calculateSize(startYear, startMonth, startDay, endYear, endMonth, endDay);
@@ -294,8 +283,15 @@ public class EventCreateController {
             // Close the current stage
             Stage currentStage = (Stage) submitButton.getScene().getWindow();
             currentStage.close();
-        } else {
-            System.out.println("ECC handleSubmit: Event name, type, or universe is empty");
+        }
+    }
+
+    private String formatYear(String yearInput) {
+        try {
+            int year = Integer.parseInt(yearInput);
+            return String.format("%04d", year);
+        } catch (NumberFormatException e) {
+            return "9999";
         }
     }
 
