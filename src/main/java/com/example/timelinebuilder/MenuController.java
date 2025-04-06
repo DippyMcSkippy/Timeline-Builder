@@ -63,10 +63,15 @@ public class MenuController {
 
                 controller.initializeWithMultiverse(multiverse);
 
-                stage.setScene(scene);
-                stage.setMaximized(true); // Ensure the stage is maximized
-                Platform.runLater(() -> stage.setMaximized(true)); // Always maximize the stage
-                stage.show();
+                Stage newStage = new Stage();
+                newStage.setTitle("Multiverse Display");
+                newStage.setScene(scene);
+                newStage.setMaximized(true); // Ensure the stage is maximized
+                Platform.runLater(() -> newStage.setMaximized(true)); // Always maximize the stage
+                newStage.show();
+
+                // Close the current stage after the new stage is shown
+                stage.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
