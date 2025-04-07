@@ -207,7 +207,9 @@ public class MultiverseDisplayController {
 
                         // Set the height of the event box based on the size parameter
                         int size = Integer.parseInt(event[7]);
+                        eventBox.setMinHeight(45);
                         eventBox.setPrefHeight(size * 10);
+                        eventBox.setMaxHeight(1500);
 
                         Text eventNameText = new Text(event[0]);
                         eventNameText.setFill(Color.WHITE);

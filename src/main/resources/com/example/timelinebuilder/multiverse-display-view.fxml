@@ -21,7 +21,7 @@
                     <Button fx:id="createUniverseButton" text="Create Universe" />
                     <Button fx:id="createEventButton" text="Create Event" />
                 </HBox>
-                <ScrollPane fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" vbarPolicy="ALWAYS">
+                <ScrollPane fitToWidth="true" fitToHeight="false" hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED">
                     <HBox fx:id="universesContainer" spacing="20.0" alignment="TOP_CENTER">
                         <padding>
                             <Insets left="10"/>
