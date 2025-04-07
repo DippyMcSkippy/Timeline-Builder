@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Timeline Builder" target="0" />
+      <module name="Timeline Builder" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
