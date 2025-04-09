@@ -12,17 +12,13 @@ public class TimelineApp extends Application {
         // Always start with the main menu
         FXMLLoader fxmlLoader = new FXMLLoader(TimelineApp.class.getResource("menu-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-
         // Get the controller and set the stage
         MenuController controller = fxmlLoader.getController();
         controller.setStage(stage);
-
-        stage.setTitle("Timeline Builder");
+        stage.setTitle("Multiverse Creator Project");
         stage.setScene(scene);
-
         // Set to full screen or maximized
         stage.setMaximized(true);
-
         stage.show();
     }
 

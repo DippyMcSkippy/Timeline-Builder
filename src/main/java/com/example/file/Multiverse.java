@@ -98,37 +98,30 @@ public class Multiverse {
             multiverseFolderPath = rootPath + File.separator + multiverseName;
             universesFolderPath = multiverseFolderPath + File.separator + "Universes";
             multiverseCsvPath = multiverseFolderPath + File.separator + multiverseName + ".csv";
-
             // Create directories
             File directory = new File(multiverseFolderPath);
             directory.mkdir();
             File universes = new File(universesFolderPath);
             universes.mkdir();
-
             // Create CSV file
             CSVWriter writer = new CSVWriter(new FileWriter(multiverseCsvPath));
-
             // Write multiverse config data
             String[] header = {"Property", "Value"};
             writer.writeNext(header);
-
             String[] nameRow = {"Multiverse Name", multiverseName};
             String[] datingSystemRow = {"Dating System", datingSystem};
             writer.writeNext(nameRow);
             writer.writeNext(datingSystemRow);
-
             if ("Relative".equals(datingSystem)) {
                 writer.writeNext(new String[]{"Before Era", beforeEra});
                 writer.writeNext(new String[]{"During Era", duringEra});
                 writer.writeNext(new String[]{"After Era", afterEra});
             }
-
             writer.close();
             //System.out.println("Multiverse created with name: " + multiverseName);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         ////System.out.println("Multiverse folder path: " + multiverseFolderPath);
         ////System.out.println("Universe folder path: " + universesFolderPath);
         ////System.out.println("Multiverse CSV path: " + multiverseCsvPath);

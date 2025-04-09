@@ -25,7 +25,7 @@ public class Event {
     // Constructor
     public Event(String eventsFolder) {
         this.eventsFolder = eventsFolder;
-        System.out.println("Event Constructor: Events folder set to: " + eventsFolder);
+        System.out.println("Event: Events folder set to: " + eventsFolder);
     }
 
     // Basic setters
@@ -82,7 +82,7 @@ public class Event {
             // Write basic event info
             writer.writeNext(new String[]{"Event Name", eventName});
             writer.writeNext(new String[]{"Event Type", eventType});
-            writer.writeNext(new String[]{"Universe Name", universeName}); // Add universe name to event info
+            writer.writeNext(new String[]{"Universe Name", universeName});
 
             // Write type-specific details
             if ("Normal".equals(eventType)) {

@@ -19,7 +19,6 @@ public class GlobalConfig {
             index++;
         }
         universeLinkedList.add(index, newUniverse);
-
         // Create a new LinkedList for events for this universe
         String eventListName = name + "eventLinkedList";
         eventLinkedLists.put(eventListName, new LinkedList<>());

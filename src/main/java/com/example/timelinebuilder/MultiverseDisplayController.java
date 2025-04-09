@@ -179,7 +179,7 @@ public class MultiverseDisplayController {
             String universeName = universe[0];
             String universeCsvPath = multiverse.getUniversesFolderPath() + File.separator + universeName + File.separator + universeName + ".csv";
             String universeColor = getUniverseColorFromCsv(universeCsvPath);
-
+            // Create a VBox for each universe in the color specified in the CSV
             if (universeColor != null) {
                 VBox universeBox = new VBox();
                 universeBox.setSpacing(10);
@@ -210,12 +210,12 @@ public class MultiverseDisplayController {
                         eventBox.setMinHeight(45);
                         eventBox.setPrefHeight(size * 10);
                         eventBox.setMaxHeight(1500);
-
+                        //set event text and color
                         Text eventNameText = new Text(event[0]);
                         eventNameText.setFill(Color.WHITE);
                         eventNameText.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
                         eventBox.getChildren().add(eventNameText);
-
+                        //set dates text and color
                         Text eventDateText = new Text(event[1] + " " + event[2] + " " + event[3] + " - " + event[4] + " " + event[5] + " " + event[6]);
                         eventDateText.setFill(Color.WHITE);
                         eventDateText.setStyle("-fx-font-size: 12px;");
